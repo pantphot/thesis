@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>monitorcpp</name>
+  <version>0.0.0</version>
+  <description>Package containing a monitor node for monitoring topics</description>
+  <maintainer email="pantphotiou@gmail.com">Pantelis Photiou</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <build_depend>rcl</build_depend>
+  <build_depend>rmw_implementation</build_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>rmw</build_depend>
+
+
+  <exec_depend>rcl</exec_depend>
+  <exec_depend>rmw_implementation</exec_depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>rmw</exec_depend>
+
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
