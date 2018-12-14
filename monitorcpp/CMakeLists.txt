@@ -25,17 +25,28 @@ ament_package()
 
 include_directories(include)
 
-add_executable(monitorcpp
+add_executable(latency
   src/monitor.cpp
   src/options.cpp
-  src/throughput.cpp
 )
-ament_target_dependencies(monitorcpp
+ament_target_dependencies(latency
   "rclcpp"
   "sensor_msgs"
   "std_msgs"
   "rmw")
 
+add_executable(throughput
+  src/options.cpp
+  src/throughput.cpp
+  )
+ament_target_dependencies(throughput
+  "rclcpp"
+  "sensor_msgs"
+  "std_msgs"
+  "rcl"
+  "rmw")
+
 install(TARGETS
-  monitorcpp
+  latency
+  throughput
   DESTINATION lib/${PROJECT_NAME})
