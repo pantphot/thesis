@@ -766,6 +766,10 @@ monitorcpp/src/monitor.cpp,83
 void receive_msg(receive_msg16,379
 int main(int argc, char * argv[])main29,895
 
+monitorcpp/src/throughput.cpp,151
+void receive_msg(const sensor_msgs::msg::Image::SharedPtr msg,rclcpp::Logger logger)receive_msg21,554
+int main(int argc, char * argv[])main33,1082
+
 monitorcpp/src/options.cpp,411
 bool find_command_option(const std::vector<std::string> & args, const std::string & option)find_command_option11,141
 std::string get_command_option(const std::vector<std::string> & args, const std::string & option)get_command_option16,306
