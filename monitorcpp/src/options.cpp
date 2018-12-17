@@ -79,7 +79,7 @@ bool parse_command_options(
   if (msg_type != nullptr) {
     std::string tmpmsg = get_command_option(args, "-m");
     if (!tmpmsg.empty()) {
-      *topic = tmpmsg;
+      *msg_type = tmpmsg;
     }
 
   }
