@@ -1,781 +1,0 @@
-
-mediator/mediator/mediator.py,190
-class Mediator(Node):Mediator21,398
-    def __init__(self,qos_profile):__init__23,421
-    def image_callback(self, msg):image_callback48,1424
-def main(argv=sys.argv[1:]):main72,2254
-
-mediator/mediator/__init__.py,0
-
-mediator/setup.py,880
-package_name = 'mediator'package_name4,67
-    name=package_name,name7,101
-    version='0.0.0',version8,124
-    packages=find_packages(exclude=['test']),packages9,145
-    data_files=[data_files10,191
-    install_requires=['setuptools'],install_requires15,364
-    zip_safe=True,zip_safe16,401
-    author='Pantelis Photiou',author17,420
-    author_email='pantphotiou@gmail.com',author_email18,451
-    maintainer='Pantelis Photiou',maintainer19,493
-    maintainer_email='pantphotiou@gmail.com',maintainer_email20,528
-    keywords=['ROS'],keywords21,574
-    classifiers=[classifiers22,596
-    description='Package containing a mediator for testing.',description28,809
-    license='Apache License, Version 2.0',license29,871
-    test_suite='test',test_suite30,914
-    tests_require=['pytest'],tests_require31,937
-    entry_points={entry_points32,967
-
-monitor/setup.py,879
-package_name = 'monitor'package_name4,67
-    name=package_name,name7,100
-    version='0.0.0',version8,123
-    packages=find_packages(exclude=['test']),packages9,144
-    data_files=[data_files10,190
-    install_requires=['setuptools'],install_requires15,363
-    zip_safe=True,zip_safe16,400
-    author='Pantelis Photiou',author17,419
-    author_email='pantphotiou@gmail.com',author_email18,450
-    maintainer='Pantelis Photiou',maintainer19,492
-    maintainer_email='pantphotiou@gmail.com',maintainer_email20,527
-    keywords=['ROS'],keywords21,573
-    classifiers=[classifiers22,595
-    description='Package containing a mediator for testing.',description28,808
-    license='Apache License, Version 2.0',license29,870
-    test_suite='test',test_suite30,913
-    tests_require=['pytest'],tests_require31,936
-    entry_points={entry_points32,966
-
-monitor/monitor/__init__.py,0
-
-monitor/monitor/monitor.py,577
-logger = rclpy.logging.get_logger('monitor')logger20,457
-PERIOD = 1PERIOD21,502
-class Monitor:Monitor23,514
-    def __init__(self,options,custom_qos_profile):__init__24,529
-    def topic_listening(self,node,options,qos_profile):topic_listening42,1178
-    def msg_callback(self, msg, logger_=logger):msg_callback49,1576
-class DataReceivingThread(Thread):DataReceivingThread72,2491
-    def __init__(self,monitor, options,custom_qos_profile):__init__74,2527
-    def run(self):run81,2767
-    def stop(self):stop91,3114
-def main(argv=sys.argv[1:]):main97,3195
-
-demos/demo_nodes_cpp_native/src/talker.cpp,344
-class Talker : public rclcpp::NodeTalker28,872
-  Talker()Talker31,917
-  size_t count_ = 1;count_63,2086
-  std::shared_ptr<std_msgs::msg::String> msg_;msg_64,2107
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;pub_65,2154
-  rclcpp::TimerBase::SharedPtr timer_;timer_66,2214
-int main(int argc, char * argv[])main69,2257
-
-demos/pendulum_control/scripts/pendulum_launch.bash,0
-
-demos/pendulum_control/test/execute_with_delay.py,24
-def main():main22,683
-
-demos/pendulum_control/include/pendulum_control/pendulum_motor.hpp,2265
-#define PENDULUM_CONTROL__PENDULUM_MOTOR_HPP_PENDULUM_CONTROL__PENDULUM_MOTOR_HPP_16,661
-#define GRAVITY GRAVITY29,925
-#define PI PI33,968
-namespace pendulum_controlpendulum_control36,1001
-struct PendulumPropertiesPendulumProperties40,1096
-  double mass = 0.01;mass43,1188
-  double length = 0.5;length45,1248
-struct PendulumStatePendulumState49,1344
-  double position = 0;position52,1405
-  double velocity = 0;velocity54,1465
-  double acceleration = 0;acceleration56,1531
-  double torque = 0;torque58,1602
-class PendulumMotorPendulumMotor62,1726
-  PendulumMotor(std::chrono::nanoseconds period, PendulumProperties properties)PendulumMotor70,1913
-  void on_command_message(pendulum_msgs::msg::JointCommand::ConstSharedPtr msg)on_command_message92,2960
-  pendulum_msgs::msg::JointState::SharedPtr get_next_sensor_message() constget_next_sensor_message113,3630
-  bool next_message_ready() constnext_message_ready120,3843
-  void set_done(bool done)set_done127,4045
-  bool done() constdone134,4212
-  std::chrono::nanoseconds get_publish_period() constget_publish_period141,4360
-  double get_position() constget_position148,4538
-  PendulumState get_state() constget_state155,4686
-  void set_state(const PendulumState & state)set_state162,4821
-  const PendulumProperties & get_properties() constget_properties169,4988
-  void set_properties(const PendulumProperties & properties)set_properties176,5161
-  size_t messages_received = 0;messages_received181,5261
-  static void * physics_update_wrapper(void * args)physics_update_wrapper184,5303
-  void * physics_update()physics_update193,5586
-  std::chrono::nanoseconds publish_period_;publish_period_223,6618
-  timespec physics_update_timespec_;physics_update_timespec_226,6729
-  double dt_;dt_227,6766
-  PendulumProperties properties_;properties_238,6904
-  PendulumState state_;state_239,6938
-  std::chrono::nanoseconds physics_update_period_;physics_update_period_241,6963
-  pendulum_msgs::msg::JointState::SharedPtr sensor_message_;sensor_message_242,7014
-  bool message_ready_;message_ready_243,7075
-  bool done_;done_244,7098
-  pthread_t physics_update_thread_;physics_update_thread_246,7113
-  pthread_attr_t thread_attr_;thread_attr_247,7149
-
-demos/pendulum_control/include/pendulum_control/rtt_executor.hpp,942
-#define PENDULUM_CONTROL__RTT_EXECUTOR_HPP_PENDULUM_CONTROL__RTT_EXECUTOR_HPP_16,659
-namespace pendulum_controlpendulum_control33,975
-class RttExecutor : public rclcpp::executor::ExecutorRttExecutor36,1084
-  RttExecutor(RttExecutor43,1220
-  virtual ~RttExecutor() {}~RttExecutor53,1515
-  bool is_rttest_ready() constis_rttest_ready57,1670
-  bool is_running() constis_running64,1876
-  void get_rtt_results(rttest_results & output) constget_rtt_results71,2060
-  void set_rtt_results_message(pendulum_msgs::msg::RttestResults::SharedPtr msg) constset_rtt_results_message76,2145
-  void spin()spin92,2801
-  int rtt_spin_some(size_t i)rtt_spin_some114,3655
-  static void * loop_callback(void * arg)loop_callback126,4137
-  rttest_results results;results147,4993
-  bool running;running149,5058
-  bool rttest_ready;rttest_ready151,5139
-  int last_sample;last_sample153,5161
-  timespec start_time_;start_time_157,5271
-
-demos/pendulum_control/include/pendulum_control/pendulum_controller.hpp,1654
-#define PENDULUM_CONTROL__PENDULUM_CONTROLLER_HPP_PENDULUM_CONTROL__PENDULUM_CONTROLLER_HPP_16,666
-#define PI PI26,876
-namespace pendulum_controlpendulum_control29,909
-struct PIDPropertiesPIDProperties33,989
-  double p = 1;p36,1041
-  double i = 0;i38,1082
-  double d = 0;d40,1125
-  double command = PI / 2;command42,1175
-class PendulumControllerPendulumController46,1270
-  PendulumController(std::chrono::nanoseconds period, PIDProperties pid)PendulumController54,1458
-  void on_sensor_message(pendulum_msgs::msg::JointState::ConstSharedPtr msg)on_sensor_message69,2145
-  void on_pendulum_setpoint(pendulum_msgs::msg::JointCommand::ConstSharedPtr msg)on_pendulum_setpoint101,3322
-  const pendulum_msgs::msg::JointCommand::SharedPtr get_next_command_message() constget_next_command_message110,3614
-  bool next_message_ready() constnext_message_ready117,3836
-  std::chrono::nanoseconds get_publish_period() constget_publish_period124,4029
-  void set_pid_properties(const PIDProperties & properties)set_pid_properties131,4266
-  const PIDProperties & get_pid_properties() constget_pid_properties138,4469
-  void set_command(double command)set_command145,4663
-  double get_command() constget_command152,4824
-  size_t messages_received = 0;messages_received158,4968
-  std::chrono::nanoseconds publish_period_;publish_period_162,5072
-  PIDProperties pid_;pid_163,5116
-  pendulum_msgs::msg::JointCommand::SharedPtr command_message_;command_message_164,5138
-  bool message_ready_;message_ready_165,5202
-  double last_error_ = 0;last_error_168,5256
-  double i_gain_ = 0;i_gain_169,5282
-  double dt_;dt_170,5304
-
-demos/pendulum_control/src/pendulum_demo.cpp,410
-static bool running = false;running40,1241
-static void * (* prev_malloc_hook)(size_t, const void *);prev_malloc_hook45,1443
-static void * testing_malloc(size_t size, const void * caller)testing_malloc58,2052
-void init_malloc_hook()init_malloc_hook79,2741
-void(*volatile __malloc_initialize_hook)(void) = init_malloc_hook;__malloc_initialize_hook89,3022
-int main(int argc, char * argv[])main97,3334
-
-demos/pendulum_control/src/pendulum_logger.cpp,46
-int main(int argc, char * argv[])main28,917
-
-demos/pendulum_control/src/pendulum_teleop.cpp,46
-int main(int argc, char * argv[])main30,923
-
-demos/intra_process_demo/include/image_pipeline/common.hpp,420
-#define IMAGE_PIPELINE__COMMON_HPP_IMAGE_PIPELINE__COMMON_HPP_16,651
-#define GETPID GETPID20,723
-#define GETPID GETPID23,772
-encoding2mat_type(const std::string & encoding)encoding2mat_type33,917
-mat_type2encoding(int mat_type)mat_type2encoding48,1256
-void set_now(builtin_interfaces::msg::Time & time)set_now64,1554
-draw_on_image(cv::Mat & image, const std::string & text, int height)draw_on_image76,1943
-
-demos/intra_process_demo/include/image_pipeline/image_view_node.hpp,349
-#define IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_16,660
-class ImageViewNode : public rclcpp::NodeImageViewNode28,954
-  explicit ImageViewNode(ImageViewNode31,1006
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;sub_69,2314
-  cv::VideoCapture cap_;cap_71,2380
-  cv::Mat frame_;frame_72,2405
-
-demos/intra_process_demo/include/image_pipeline/watermark_node.hpp,413
-#define IMAGE_PIPELINE__WATERMARK_NODE_HPP_IMAGE_PIPELINE__WATERMARK_NODE_HPP_16,659
-class WatermarkNode : public rclcpp::NodeWatermarkNode29,967
-  WatermarkNode(WatermarkNode32,1019
-  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;pub_64,2279
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;sub_65,2341
-  cv::VideoCapture cap_;cap_67,2407
-  cv::Mat frame_;frame_68,2432
-
-demos/intra_process_demo/include/image_pipeline/camera_node.hpp,517
-#define IMAGE_PIPELINE__CAMERA_NODE_HPP_IMAGE_PIPELINE__CAMERA_NODE_HPP_16,656
-class CameraNode : public rclcpp::NodeCameraNode31,1055
-  CameraNode(CameraNode34,1104
-  virtual ~CameraNode()~CameraNode52,1883
-  void loop()loop61,2050
-  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;pub_93,3125
-  std::thread thread_;thread_94,3187
-  std::atomic<bool> canceled_;canceled_95,3210
-  bool watermark_;watermark_99,3341
-  cv::VideoCapture cap_;cap_101,3361
-  cv::Mat frame_;frame_102,3386
-
-demos/intra_process_demo/src/cyclic_pipeline/cyclic_pipeline.cpp,374
-struct IncrementerPipe : public rclcpp::NodeIncrementerPipe27,890
-  IncrementerPipe(const std::string & name, const std::string & in, const std::string & out)IncrementerPipe29,937
-  rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr pub;pub60,2264
-  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr sub;sub61,2322
-int main(int argc, char * argv[])main64,2387
-
-demos/intra_process_demo/src/two_node_pipeline/two_node_pipeline.cpp,519
-struct Producer : public rclcpp::NodeProducer27,844
-  Producer(const std::string & name, const std::string & output)Producer29,884
-  rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr pub_;pub_52,1806
-  rclcpp::TimerBase::SharedPtr timer_;timer_53,1865
-struct Consumer : public rclcpp::NodeConsumer57,1940
-  Consumer(const std::string & name, const std::string & input)Consumer59,1980
-  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr sub_;sub_73,2489
-int main(int argc, char * argv[])main76,2555
-
-demos/intra_process_demo/src/image_pipeline/camera_node.cpp,45
-int main(int argc, char ** argv)main21,707
-
-demos/intra_process_demo/src/image_pipeline/watermark_node.cpp,45
-int main(int argc, char ** argv)main21,710
-
-demos/intra_process_demo/src/image_pipeline/image_pipeline_all_in_one.cpp,46
-int main(int argc, char * argv[])main23,798
-
-demos/intra_process_demo/src/image_pipeline/image_pipeline_with_two_image_view.cpp,46
-int main(int argc, char * argv[])main23,798
-
-demos/intra_process_demo/src/image_pipeline/image_view_node.cpp,45
-int main(int argc, char ** argv)main21,711
-
-demos/topic_monitor/launch/depth_demo.launch.py,154
-def create_data_publisher_action(size, depth):create_data_publisher_action22,787
-def generate_launch_description():generate_launch_description33,1182
-
-demos/topic_monitor/launch/fragmentation_demo.launch.py,70
-def generate_launch_description():generate_launch_description22,780
-
-demos/topic_monitor/launch/reliability_demo.launch.py,70
-def generate_launch_description():generate_launch_description22,793
-
-demos/topic_monitor/setup.py,614
-package_name = 'topic_monitor'package_name7,90
-    name=package_name,name10,129
-    version='0.5.1',version11,152
-    packages=find_packages(exclude=['test']),packages12,173
-    data_files=[data_files13,219
-    install_requires=[install_requires20,494
-    zip_safe=True,zip_safe24,564
-    keywords=['ROS'],keywords25,583
-    classifiers=[classifiers26,605
-    description='Package containing tools for monitoring ROS 2 topics.',description32,818
-    license='Apache License, Version 2.0',license33,891
-    tests_require=['pytest'],tests_require34,934
-    entry_points={entry_points35,964
-
-demos/topic_monitor/topic_monitor/__init__.py,0
-
-demos/topic_monitor/topic_monitor/scripts/__init__.py,0
-
-demos/topic_monitor/topic_monitor/scripts/data_publisher.py,111
-default_depth = 10default_depth24,804
-def main():main27,825
-    def publish_msg(val):publish_msg102,3660
-
-demos/topic_monitor/topic_monitor/scripts/topic_monitor.py,1956
-QOS_DEPTH = 100QOS_DEPTH29,878
-logger = rclpy.logging.get_logger('topic_monitor')logger30,894
-class MonitoredTopic:MonitoredTopic33,947
-    def __init__(self, topic_id, stale_time, lock=None):__init__36,1037
-    def increment_expected_value(self):increment_expected_value49,1493
-    def allowed_latency_timer_callback(self):allowed_latency_timer_callback54,1647
-    def get_data_from_msg(self, msg):get_data_from_msg58,1780
-    def topic_data_callback(self, msg, logger_=logger):topic_data_callback64,1972
-    def check_status(self, current_time=time.time()):check_status86,3026
-    def current_reception_rate(self, window_size):current_reception_rate100,3575
-class TopicMonitor:TopicMonitor114,4053
-    def __init__(self, window_size):__init__117,4154
-    def add_monitored_topic(add_monitored_topic126,4531
-    def is_supported_type(self, type_name):is_supported_type171,6707
-    def get_topic_info(self, topic_name):get_topic_info174,6798
-    def update_topic_statuses(self):update_topic_statuses191,7500
-    def output_status(self):output_status200,7888
-    def check_status(self):check_status207,8188
-    def calculate_statistics(self):calculate_statistics213,8361
-    def calculate_reception_rates(self):calculate_reception_rates216,8439
-    def get_window_size(self):get_window_size225,8908
-class TopicMonitorDisplay:TopicMonitorDisplay229,8973
-    def __init__(self, topic_monitor, update_period):__init__232,9059
-    def make_plot(self):make_plot246,9519
-    def add_monitored_topic(self, topic_name):add_monitored_topic260,10087
-    def update_display(self):update_display274,10728
-class DataReceivingThread(Thread):DataReceivingThread299,11698
-    def __init__(self, topic_monitor, options):__init__301,11734
-    def run(self):run307,11930
-    def stop(self):stop315,12171
-def run_topic_listening(node, topic_monitor, options):run_topic_listening320,12251
-def main():main367,14660
-
-demos/topic_monitor/topic_monitor/scripts/ros1/data_pub_ros1.py,70
-def main():main24,743
-    def publish_msg(val):publish_msg47,1458
-
-demos/topic_monitor/test/test_flake8.py,38
-def test_flake8():test_flake821,693
-
-demos/topic_monitor/test/test_pep257.py,38
-def test_pep257():test_pep25721,693
-
-demos/demo_nodes_cpp/launch/topics/talker_listener_best_effort.launch.py,70
-def generate_launch_description():generate_launch_description21,718
-
-demos/demo_nodes_cpp/launch/topics/talker_listener.launch.py,70
-def generate_launch_description():generate_launch_description21,706
-
-demos/demo_nodes_cpp/launch/services/add_two_ints.launch.py,70
-def generate_launch_description():generate_launch_description21,721
-
-demos/demo_nodes_cpp/launch/services/add_two_ints_async.launch.py,70
-def generate_launch_description():generate_launch_description21,721
-
-demos/demo_nodes_cpp/src/topics/allocator_tutorial.cpp,651
-static uint32_t num_allocs = 0;num_allocs25,865
-static uint32_t num_deallocs = 0;num_deallocs26,897
-struct MyAllocatorMyAllocator29,1035
-  T * allocate(size_t size, const void * = 0)allocate49,1405
-  void deallocate(T * ptr, size_t size)deallocate58,1587
-  struct rebindrebind69,1751
-    typedef MyAllocator<U> other;other71,1771
-static bool is_running = false;is_running93,2165
-static uint32_t global_runtime_allocs = 0;global_runtime_allocs94,2197
-static uint32_t global_runtime_deallocs = 0;global_runtime_deallocs95,2240
-void * operator new(std::size_t size)operator new97,2286
-int main(int argc, char ** argv)main126,2749
-
-demos/demo_nodes_cpp/src/topics/talker.cpp,423
-void print_usage()print_usage27,829
-class Talker : public rclcpp::NodeTalker38,1241
-  explicit Talker(const std::string & topic_name)Talker41,1286
-  size_t count_ = 1;count_68,2224
-  std::shared_ptr<std_msgs::msg::String> msg_;msg_69,2245
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;pub_70,2292
-  rclcpp::TimerBase::SharedPtr timer_;timer_71,2352
-int main(int argc, char * argv[])main74,2395
-
-demos/demo_nodes_cpp/src/topics/listener.cpp,284
-void print_usage()print_usage24,772
-class Listener : public rclcpp::NodeListener35,1192
-  explicit Listener(const std::string & topic_name)Listener38,1239
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;sub_57,2022
-int main(int argc, char * argv[])main60,2089
-
-demos/demo_nodes_cpp/src/topics/talker_serialized_message.cpp,567
-void print_usage()print_usage30,881
-class SerializedMessageTalker : public rclcpp::NodeSerializedMessageTalker39,1146
-  explicit SerializedMessageTalker(const std::string & topic_name)SerializedMessageTalker42,1208
-  ~SerializedMessageTalker()~SerializedMessageTalker124,5003
-  size_t count_ = 1;count_133,5222
-  rcl_serialized_message_t serialized_msg_;serialized_msg_134,5243
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;pub_135,5287
-  rclcpp::TimerBase::SharedPtr timer_;timer_136,5347
-int main(int argc, char * argv[])main139,5390
-
-demos/demo_nodes_cpp/src/topics/listener_serialized_message.cpp,355
-void print_usage()print_usage27,857
-class SerializedMessageListener : public rclcpp::NodeSerializedMessageListener38,1277
-  explicit SerializedMessageListener(const std::string & topic_name)SerializedMessageListener41,1341
-  rclcpp::Subscription<rmw_serialized_message_t>::SharedPtr sub_;sub_83,3404
-int main(int argc, char * argv[])main86,3474
-
-demos/demo_nodes_cpp/src/topics/listener_best_effort.cpp,245
-class ListenerBestEffort : public rclcpp::NodeListenerBestEffort21,717
-  ListenerBestEffort()ListenerBestEffort24,774
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;sub_38,1137
-int main(int argc, char * argv[])main41,1204
-
-demos/demo_nodes_cpp/src/timers/reuse_timer.cpp,321
-class ReuseTimerNode : public rclcpp::NodeReuseTimerNode23,739
-  ReuseTimerNode()ReuseTimerNode26,792
-  rclcpp::TimerBase::SharedPtr periodic_timer;periodic_timer51,1546
-  rclcpp::TimerBase::SharedPtr one_off_timer;one_off_timer52,1593
-  size_t count;count53,1639
-int main(int argc, char * argv[])main56,1659
-
-demos/demo_nodes_cpp/src/timers/one_off_timer.cpp,325
-class OneOffTimerNode : public rclcpp::NodeOneOffTimerNode23,739
-  OneOffTimerNode()OneOffTimerNode26,793
-  rclcpp::TimerBase::SharedPtr periodic_timer;periodic_timer45,1427
-  rclcpp::TimerBase::SharedPtr one_off_timer;one_off_timer46,1474
-  size_t count;count47,1520
-int main(int argc, char * argv[])main50,1540
-
-demos/demo_nodes_cpp/src/parameters/even_parameters_node.cpp,164
-class EvenParameterNode : public rclcpp::NodeEvenParameterNode20,682
-  EvenParameterNode()EvenParameterNode23,738
-int main(int argc, char ** argv)main74,2772
-
-demos/demo_nodes_cpp/src/parameters/list_parameters.cpp,45
-int main(int argc, char ** argv)main22,722
-
-demos/demo_nodes_cpp/src/parameters/list_parameters_async.cpp,45
-int main(int argc, char ** argv)main22,722
-
-demos/demo_nodes_cpp/src/parameters/set_and_get_parameters.cpp,45
-int main(int argc, char ** argv)main23,740
-
-demos/demo_nodes_cpp/src/parameters/parameter_events.cpp,97
-void on_parameter_event(on_parameter_event23,740
-int main(int argc, char ** argv)main44,1463
-
-demos/demo_nodes_cpp/src/parameters/set_and_get_parameters_async.cpp,45
-int main(int argc, char ** argv)main23,740
-
-demos/demo_nodes_cpp/src/parameters/parameter_events_async.cpp,634
-class ParameterEventsAsyncNode : public rclcpp::NodeParameterEventsAsyncNode26,863
-  ParameterEventsAsyncNode()ParameterEventsAsyncNode29,926
-  void queue_first_set_parameter_request()queue_first_set_parameter_request69,2619
-  void queue_second_set_parameter_request()queue_second_set_parameter_request99,3726
-  rclcpp::AsyncParametersClient::SharedPtr parameters_client_;parameters_client_123,4517
-  rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_event_sub_;parameter_event_sub_124,4580
-  rclcpp::TimerBase::SharedPtr timer_;timer_125,4673
-int main(int argc, char ** argv)main128,4716
-
-demos/demo_nodes_cpp/src/services/add_two_ints_server.cpp,303
-void print_usage()print_usage25,809
-class ServerNode : public rclcpp::NodeServerNode35,1113
-  explicit ServerNode(const std::string & service_name)ServerNode38,1162
-  rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr srv_;srv_58,2015
-int main(int argc, char * argv[])main61,2091
-
-demos/demo_nodes_cpp/src/services/add_two_ints_client_async.cpp,364
-void print_usage()print_usage28,868
-class ClientNode : public rclcpp::NodeClientNode37,1171
-  explicit ClientNode(const std::string & service_name)ClientNode40,1220
-  void queue_async_request()queue_async_request49,1523
-  rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client_;client_77,2690
-int main(int argc, char ** argv)main80,2768
-
-demos/demo_nodes_cpp/src/services/add_two_ints_client.cpp,176
-void print_usage()print_usage27,847
-example_interfaces::srv::AddTwoInts::Response::SharedPtr send_request(send_request37,1209
-int main(int argc, char ** argv)main53,1704
-
-demos/image_tools/include/image_tools/options.hpp,67
-#define IMAGE_TOOLS__OPTIONS_HPP_IMAGE_TOOLS__OPTIONS_HPP_16,649
-
-demos/image_tools/src/burger.cpp,203
-void decode_base64(const char * cstr, std::vector<uint8_t> & out)decode_base6434,1038
-Burger::Burger()Burger79,2484
-cv::Mat & Burger::render_burger(size_t width, size_t height)render_burger95,2920
-
-demos/image_tools/src/showimage.cpp,157
-encoding2mat_type(const std::string & encoding)encoding2mat_type35,1083
-void show_image(show_image58,1723
-int main(int argc, char * argv[])main88,2704
-
-demos/image_tools/src/options.cpp,413
-bool find_command_option(const std::vector<std::string> & args, const std::string & option)find_command_option23,748
-std::string get_command_option(const std::vector<std::string> & args, const std::string & option)get_command_option28,913
-bool get_flag_option(const std::vector<std::string> & args, const std::string & option)get_flag_option37,1165
-bool parse_command_options(parse_command_options46,1378
-
-demos/image_tools/src/burger.hpp,490
-#define BURGER_HPP_BURGER_HPP_16,635
-namespace burgerburger22,715
-class BurgerBurger25,735
-  cv::Mat burger_buf;burger_buf30,826
-  cv::Mat burger_template, burger_mask;burger_template33,858
-  cv::Mat burger_template, burger_mask;burger_mask33,858
-  std::vector<int> x, y, x_inc, y_inc;x34,898
-  std::vector<int> x, y, x_inc, y_inc;y34,898
-  std::vector<int> x, y, x_inc, y_inc;x_inc34,898
-  std::vector<int> x, y, x_inc, y_inc;y_inc34,898
-#define BURGER BURGER39,1012
-
-demos/image_tools/src/cam2image.cpp,169
-mat_type2encoding(int mat_type)mat_type2encoding40,1198
-void convert_frame_to_message(convert_frame_to_message62,1737
-int main(int argc, char * argv[])main76,2240
-
-demos/logging_demo/include/logging_demo/logger_config_component.hpp,286
-#define LOGGING_DEMO__LOGGER_CONFIG_COMPONENT_HPP_LOGGING_DEMO__LOGGER_CONFIG_COMPONENT_HPP_16,666
-namespace logging_demologging_demo25,859
-class LoggerConfig : public rclcpp::NodeLoggerConfig28,885
-  rclcpp::Service<logging_demo::srv::ConfigLogger>::SharedPtr srv_;srv_41,1199
-
-demos/logging_demo/include/logging_demo/visibility_control.h,999
-#define LOGGING_DEMO__VISIBILITY_CONTROL_H_LOGGING_DEMO__VISIBILITY_CONTROL_H_16,659
-    #define LOGGING_DEMO_EXPORT LOGGING_DEMO_EXPORT28,927
-    #define LOGGING_DEMO_IMPORT LOGGING_DEMO_IMPORT29,987
-    #define LOGGING_DEMO_EXPORT LOGGING_DEMO_EXPORT31,1055
-    #define LOGGING_DEMO_IMPORT LOGGING_DEMO_IMPORT32,1109
-    #define LOGGING_DEMO_PUBLIC LOGGING_DEMO_PUBLIC35,1207
-    #define LOGGING_DEMO_PUBLIC LOGGING_DEMO_PUBLIC37,1267
-  #define LOGGING_DEMO_PUBLIC_TYPE LOGGING_DEMO_PUBLIC_TYPE39,1328
-  #define LOGGING_DEMO_LOCALLOGGING_DEMO_LOCAL40,1383
-  #define LOGGING_DEMO_EXPORT LOGGING_DEMO_EXPORT42,1418
-  #define LOGGING_DEMO_IMPORTLOGGING_DEMO_IMPORT43,1488
-    #define LOGGING_DEMO_PUBLIC LOGGING_DEMO_PUBLIC45,1538
-    #define LOGGING_DEMO_LOCAL LOGGING_DEMO_LOCAL46,1610
-    #define LOGGING_DEMO_PUBLICLOGGING_DEMO_PUBLIC48,1689
-    #define LOGGING_DEMO_LOCALLOGGING_DEMO_LOCAL49,1721
-  #define LOGGING_DEMO_PUBLIC_TYPELOGGING_DEMO_PUBLIC_TYPE51,1761
-
-demos/logging_demo/include/logging_demo/logger_usage_component.hpp,546
-#define LOGGING_DEMO__LOGGER_USAGE_COMPONENT_HPP_LOGGING_DEMO__LOGGER_USAGE_COMPONENT_HPP_16,665
-namespace logging_demologging_demo24,845
-class LoggerUsage : public rclcpp::NodeLoggerUsage27,871
-  size_t count_;count_37,1001
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;pub_38,1018
-  rclcpp::TimerBase::SharedPtr one_shot_timer_, timer_;one_shot_timer_39,1078
-  rclcpp::TimerBase::SharedPtr one_shot_timer_, timer_;timer_39,1078
-  std::function<bool()> debug_function_to_evaluate_;debug_function_to_evaluate_40,1134
-
-demos/logging_demo/src/logger_usage_component.cpp,225
-namespace logging_demologging_demo28,885
-LoggerUsage::LoggerUsage()LoggerUsage31,911
-void LoggerUsage::on_timer()on_timer54,1861
-bool is_divisor_of_twelve(size_t val, rclcpp::Logger logger)is_divisor_of_twelve83,3035
-
-demos/logging_demo/src/logger_config_component.cpp,173
-namespace logging_demologging_demo26,869
-LoggerConfig::LoggerConfig()LoggerConfig29,895
-LoggerConfig::handle_logger_config_request(handle_logger_config_request39,1159
-
-demos/logging_demo/src/logging_demo_main.cpp,46
-int main(int argc, char * argv[])main21,767
-
-demos/composition/include/composition/client_component.hpp,318
-#define COMPOSITION__CLIENT_COMPONENT_HPP_COMPOSITION__CLIENT_COMPONENT_HPP_16,658
-namespace compositioncomposition22,827
-class Client : public rclcpp::NodeClient25,852
-  rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr client_;client_35,971
-  rclcpp::TimerBase::SharedPtr timer_;timer_36,1045
-
-demos/composition/include/composition/talker_component.hpp,332
-#define COMPOSITION__TALKER_COMPONENT_HPP_COMPOSITION__TALKER_COMPONENT_HPP_16,658
-namespace compositioncomposition22,811
-class Talker : public rclcpp::NodeTalker25,836
-  size_t count_;count_35,955
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_;pub_36,972
-  rclcpp::TimerBase::SharedPtr timer_;timer_37,1032
-
-demos/composition/include/composition/visibility_control.h,967
-#define COMPOSITION__VISIBILITY_CONTROL_H_COMPOSITION__VISIBILITY_CONTROL_H_16,658
-    #define COMPOSITION_EXPORT COMPOSITION_EXPORT28,925
-    #define COMPOSITION_IMPORT COMPOSITION_IMPORT29,984
-    #define COMPOSITION_EXPORT COMPOSITION_EXPORT31,1051
-    #define COMPOSITION_IMPORT COMPOSITION_IMPORT32,1104
-    #define COMPOSITION_PUBLIC COMPOSITION_PUBLIC35,1200
-    #define COMPOSITION_PUBLIC COMPOSITION_PUBLIC37,1258
-  #define COMPOSITION_PUBLIC_TYPE COMPOSITION_PUBLIC_TYPE39,1317
-  #define COMPOSITION_LOCALCOMPOSITION_LOCAL40,1370
-  #define COMPOSITION_EXPORT COMPOSITION_EXPORT42,1404
-  #define COMPOSITION_IMPORTCOMPOSITION_IMPORT43,1473
-    #define COMPOSITION_PUBLIC COMPOSITION_PUBLIC45,1522
-    #define COMPOSITION_LOCAL COMPOSITION_LOCAL46,1593
-    #define COMPOSITION_PUBLICCOMPOSITION_PUBLIC48,1671
-    #define COMPOSITION_LOCALCOMPOSITION_LOCAL49,1702
-  #define COMPOSITION_PUBLIC_TYPECOMPOSITION_PUBLIC_TYPE51,1741
-
-demos/composition/include/composition/listener_component.hpp,258
-#define COMPOSITION__LISTENER_COMPONENT_HPP_COMPOSITION__LISTENER_COMPONENT_HPP_16,660
-namespace compositioncomposition22,815
-class Listener : public rclcpp::NodeListener25,840
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;sub_32,932
-
-demos/composition/include/composition/server_component.hpp,259
-#define COMPOSITION__SERVER_COMPONENT_HPP_COMPOSITION__SERVER_COMPONENT_HPP_16,658
-namespace compositioncomposition22,827
-class Server : public rclcpp::NodeServer25,852
-  rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr srv_;srv_32,940
-
-demos/composition/src/api_composition_cli.cpp,85
-void print_usage()print_usage25,816
-int main(int argc, char * argv[])main34,1127
-
-demos/composition/src/linktime_composition.cpp,128
-#define LINKTIME_COMPOSITION_LOGGER_NAME LINKTIME_COMPOSITION_LOGGER_NAME22,741
-int main(int argc, char * argv[])main24,806
-
-demos/composition/src/listener_component.cpp,79
-namespace compositioncomposition23,766
-Listener::Listener()Listener29,1068
-
-demos/composition/src/api_composition.cpp,264
-namespace fsfs18,721
-class pathpath20,736
-  explicit path(const std::string & p)path23,757
-  bool is_absolute()is_absolute26,814
-  std::string path_;path_32,881
-std::vector<std::string> split(split52,1270
-int main(int argc, char * argv[])main68,1610
-
-demos/composition/src/server_component.cpp,72
-namespace compositioncomposition24,801
-Server::Server()Server27,826
-
-demos/composition/src/manual_composition.cpp,46
-int main(int argc, char * argv[])main23,842
-
-demos/composition/src/dlopen_composition.cpp,124
-#define DLOPEN_COMPOSITION_LOGGER_NAME DLOPEN_COMPOSITION_LOGGER_NAME22,741
-int main(int argc, char * argv[])main24,802
-
-demos/composition/src/client_component.cpp,113
-namespace compositioncomposition26,840
-Client::Client()Client29,865
-void Client::on_timer()on_timer39,1275
-
-demos/composition/src/talker_component.cpp,114
-namespace compositioncomposition26,821
-Talker::Talker()Talker32,1121
-void Talker::on_timer()on_timer42,1438
-
-demos/dummy_robot/dummy_robot_bringup/launch/dummy_robot_bringup.launch.py,70
-def generate_launch_description():generate_launch_description22,756
-
-demos/dummy_robot/dummy_sensors/src/dummy_joint_states.cpp,46
-int main(int argc, char * argv[])main26,825
-
-demos/dummy_robot/dummy_sensors/src/dummy_laser.cpp,129
-#define _USE_MATH_DEFINES_USE_MATH_DEFINES17,657
-#define DEG2RAD DEG2RAD33,909
-int main(int argc, char * argv[])main35,939
-
-demos/dummy_robot/dummy_map_server/src/dummy_map_server.cpp,46
-int main(int argc, char * argv[])main26,829
-
-demos/lifecycle/launch/lifecycle_demo.launch.py,70
-def generate_launch_description():generate_launch_description20,722
-
-demos/lifecycle/src/lifecycle_talker.cpp,854
-class LifecycleTalker : public rclcpp_lifecycle::LifecycleNodeLifecycleTalker53,1756
-  explicit LifecycleTalker(const std::string & node_name, bool intra_process_comms = false)LifecycleTalker61,1970
-  publish()publish74,2540
-  on_configure(const rclcpp_lifecycle::State &)on_configure107,3840
-  on_activate(const rclcpp_lifecycle::State &)on_activate145,5690
-  on_deactivate(const rclcpp_lifecycle::State &)on_deactivate180,7205
-  on_cleanup(const rclcpp_lifecycle::State &)on_cleanup210,8571
-  on_shutdown(const rclcpp_lifecycle::State & state)on_shutdown241,9975
-  std::shared_ptr<std_msgs::msg::String> msg_;msg_264,10844
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::String>> pub_;pub_271,11193
-  std::shared_ptr<rclcpp::TimerBase> timer_;timer_277,11555
-int main(int argc, char * argv[])main285,11754
-
-demos/lifecycle/src/lifecycle_listener.cpp,548
-class LifecycleListener : public rclcpp::NodeLifecycleListener34,1075
-  explicit LifecycleListener(const std::string & node_name)LifecycleListener37,1131
-  void data_callback(const std_msgs::msg::String::SharedPtr msg)data_callback52,1807
-  void notification_callback(const lifecycle_msgs::msg::TransitionEvent::SharedPtr msg)notification_callback57,1952
-  std::shared_ptr<rclcpp::Subscription<std_msgs::msg::String>> sub_data_;sub_data_64,2209
-  sub_notification_;sub_notification_66,2361
-int main(int argc, char ** argv)main69,2386
-
-demos/lifecycle/src/lifecycle_service_client.cpp,1074
-static constexpr char const * lifecycle_node = "lc_talker";lifecycle_node32,995
-static constexpr char const * node_get_state_topic = "/lc_talker/get_state";node_get_state_topic41,1329
-static constexpr char const * node_change_state_topic = "/lc_talker/change_state";node_change_state_topic42,1406
-wait_for_result(wait_for_result46,1556
-class LifecycleServiceClient : public rclcpp::NodeLifecycleServiceClient62,2099
-  explicit LifecycleServiceClient(const std::string & node_name)LifecycleServiceClient65,2160
-  init()init70,2258
-  get_state(std::chrono::seconds time_out = 3s)get_state95,3143
-  change_state(std::uint8_t transition, std::chrono::seconds time_out = 3s)change_state150,5072
-  std::shared_ptr<rclcpp::Client<lifecycle_msgs::srv::GetState>> client_get_state_;client_get_state_189,6418
-  std::shared_ptr<rclcpp::Client<lifecycle_msgs::srv::ChangeState>> client_change_state_;client_change_state_190,6502
-callee_script(std::shared_ptr<LifecycleServiceClient> lc_client)callee_script202,6810
-int main(int argc, char ** argv)main287,8739
-
-demos/demo_nodes_py/setup.py,807
-package_name = 'demo_nodes_py'package_name4,67
-    name=package_name,name7,106
-    version='0.5.1',version8,129
-    packages=find_packages(exclude=['test']),packages9,150
-    data_files=[data_files10,196
-    install_requires=['setuptools'],install_requires15,369
-    zip_safe=True,zip_safe16,406
-    author='Esteve Fernandez',author17,425
-    author_email='esteve@osrfoundation.org',author_email18,456
-    maintainer='Mikael Arguedas',maintainer19,501
-    maintainer_email='mikael@osrfoundation.org',maintainer_email20,535
-    keywords=['ROS'],keywords21,584
-    classifiers=[classifiers22,606
-    description=(description28,819
-    license='Apache License, Version 2.0',license32,973
-    tests_require=['pytest'],tests_require33,1016
-    entry_points={entry_points34,1046
-
-demos/demo_nodes_py/test/test_copyright.py,44
-def test_copyright():test_copyright21,699
-
-demos/demo_nodes_py/test/test_flake8.py,38
-def test_flake8():test_flake821,693
-
-demos/demo_nodes_py/test/test_pep257.py,38
-def test_pep257():test_pep25721,693
-
-demos/demo_nodes_py/demo_nodes_py/__init__.py,0
-
-demos/demo_nodes_py/demo_nodes_py/topics/talker.py,160
-class Talker(Node):Talker21,678
-    def __init__(self):__init__23,699
-    def timer_callback(self):timer_callback30,937
-def main(args=None):main38,1164
-
-demos/demo_nodes_py/demo_nodes_py/topics/__init__.py,0
-
-demos/demo_nodes_py/demo_nodes_py/topics/talker_qos.py,188
-class TalkerQos(Node):TalkerQos28,915
-    def __init__(self, qos_profile):__init__30,939
-    def timer_callback(self):timer_callback44,1503
-def main(argv=sys.argv[1:]):main54,1770
-
-demos/demo_nodes_py/demo_nodes_py/topics/listener_qos.py,201
-class ListenerQos(Node):ListenerQos26,816
-    def __init__(self, qos_profile):__init__28,842
-    def chatter_callback(self, msg):chatter_callback37,1270
-def main(argv=sys.argv[1:]):main41,1368
-
-demos/demo_nodes_py/demo_nodes_py/topics/listener.py,172
-class Listener(Node):Listener21,678
-    def __init__(self):__init__23,701
-    def chatter_callback(self, msg):chatter_callback27,849
-def main(args=None):main31,947
-
-demos/demo_nodes_py/demo_nodes_py/services/add_two_ints_client.py,33
-def main(args=None):main20,664
-
-demos/demo_nodes_py/demo_nodes_py/services/__init__.py,0
-
-demos/demo_nodes_py/demo_nodes_py/services/add_two_ints_server.py,213
-class AddTwoIntsServer(Node):AddTwoIntsServer21,692
-    def __init__(self):__init__23,723
-    def add_two_ints_callback(self, request, response):add_two_ints_callback27,891
-def main(args=None):main34,1108
-
-demos/demo_nodes_py/demo_nodes_py/services/add_two_ints_client_async.py,33
-def main(args=None):main20,664
-
-monitorcpp/include/monitorcpp/optionsmonitor.hpp,77
-#define MONITORCPP__OPTIONSMONITOR_HPP_MONITORCPP__OPTIONSMONITOR_HPP_2,40
-
-monitorcpp/src/throughputC.cpp,112
-const rosidl_message_type_support_t * image_ts =image_ts31,798
-int main(int argc, char * argv[])main50,1775
-
-monitorcpp/src/monitor.cpp,83
-void receive_msg(receive_msg16,379
-int main(int argc, char * argv[])main29,895
-
-monitorcpp/src/throughput.cpp,151
-void receive_msg(const sensor_msgs::msg::Image::SharedPtr msg,rclcpp::Logger logger)receive_msg21,554
-int main(int argc, char * argv[])main33,1082
-
-monitorcpp/src/options.cpp,411
-bool find_command_option(const std::vector<std::string> & args, const std::string & option)find_command_option11,141
-std::string get_command_option(const std::vector<std::string> & args, const std::string & option)get_command_option16,306
-bool get_flag_option(const std::vector<std::string> & args, const std::string & option)get_flag_option25,558
-bool parse_command_options(parse_command_options34,771

@@ -22,6 +22,7 @@ void receive_msg(
   auto time_received = clock->now();
   auto latency = time_received.nanoseconds() - time_sent.nanoseconds();
   RCLCPP_INFO(logger, "Latency %lf", latency*1e-9);
+  RCLCPP_INFO(logger, "size %d", sizeof(msg->header));
 
 
 }
