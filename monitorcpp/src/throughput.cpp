@@ -6,28 +6,14 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
-#include "rmw/rmw.h"
-#include "rmw/types.h"
-#include "rcl/subscription.h"
-
-// #include "ros2cli/ros2msg"
-
 #include "sensor_msgs/msg/image.hpp"
-#include "std_msgs/msg/bool.hpp"
 #include "monitorcpp/optionsmonitor.hpp"
 
-// void receive_serialized_msg(const sensor_msgs::msg::Image::SharedPtr msg,rclcpp::Logger logger)
+
 // Message Callback, also calculates latency
-void receive_msg(const sensor_msgs::msg::Image::SharedPtr msg,rclcpp::Logger logger)
+void receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,rclcpp::Logger logger)
 {
-  RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
-  // auto time_sent = rclcpp::Time( msg->header.stamp.sec, msg->header.stamp.nanosec,RCL_SYSTEM_TIME);
-  // rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
-  // auto time_received = clock->now();
-  // auto latency = time_received.nanoseconds() - time_sent.nanoseconds();
-  // RCLCPP_INFO(logger, "Latency %lf", latency*1e-9);
-
-
+  RCLCPP_INFO(logger, "Received data of length %d ", msg->buffer_length);
 }
 
 int main(int argc, char * argv[])
@@ -39,12 +25,8 @@ int main(int argc, char * argv[])
   size_t depth = rmw_qos_profile_default.depth;
   rmw_qos_reliability_policy_t reliability_policy = rmw_qos_profile_default.reliability;
   rmw_qos_history_policy_t history_policy = rmw_qos_profile_default.history;
-  std::string topic("image");
+  std::string topic;
   std::string msg_type ("Image");
-  bool * taken;
-  rcl_serialized_message_t * serialized_message;
-  rmw_message_info_t * message_info;
-  std::cout << "entered" << std::endl;
 
   // Force flush of the stdout buffer.
   // This ensures a correct sync of all prints
@@ -57,7 +39,7 @@ int main(int argc, char * argv[])
   {
     return 0;
   }
-  // subscription->topic_name = "image";
+
   // Set quality of service profile based on command line options.
   rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
   custom_qos_profile.depth = depth;
@@ -65,32 +47,23 @@ int main(int argc, char * argv[])
   custom_qos_profile.history = history_policy;
 
   //Initialize a ROS node
-  auto node = rclcpp::Node::make_shared("monitorcpp");
+  auto node = rclcpp::Node::make_shared("throughput");
 
-  auto callback = [&node](const sensor_msgs::msg::Image::SharedPtr msg)
+  //Declaration of callback function for receiving messages
+  auto callback = [&node](const std::shared_ptr<rmw_serialized_message_t>msg)
   {
     receive_msg(msg, node->get_logger());
   };
 
   std::cerr << "Subscribing to topic ' " << topic << "'" << std::endl;
   RCLCPP_INFO(node->get_logger(), "Subscribing to topic '%s'", topic.c_str());
+
   // Initialize a subscriber that will receive the ROS Image message to be displayed.
+  rclcpp::Subscription<rmw_serialized_message_t>::SharedPtr sub = node->create_subscription<sensor_msgs::msg::Image>(
+    topic.c_str(), callback, custom_qos_profile);
 
-  auto sub = node->create_subscription<sensor_msgs::msg::Image>(
-    topic, callback, custom_qos_profile);
-
-  std::shared_ptr<rcl_subscription_t> subser = sub->get_subscription_handle();
-
-  while (rclcpp::ok()) {
-    // rcl_ret_t response = rcl_take_serialized_message(subser.get(),serialized_message,message_info);
-    // std::cout << "/* response */  " << response << std::endl;
-    std::cerr << "Spinning" << std::endl;
-    rclcpp::spin_some(node);
-  }
-
-
-  // std::cerr << "Spinning" << std::endl;
-  // rclcpp::spin(node);
+  std::cerr << "Spinning" << std::endl;
+  rclcpp::spin(node);
 
   std::cerr << "Shutdown" << std::endl;
   rclcpp::shutdown();

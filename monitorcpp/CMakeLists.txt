@@ -13,14 +13,11 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rcl REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rmw REQUIRED)
-#find_package(rmw_implementation REQUIRED)
-##force opensplice implementation
-#find_package(rmw_opensplice_cpp REQUIRED)
-#find_package(rmw_fastrtps_cpp REQUIRED)
-#find_package(ros2cli REQUIRED)
+
 ament_package()
 
 include_directories(include)
@@ -43,8 +40,7 @@ ament_target_dependencies(throughput
   "rclcpp"
   "sensor_msgs"
   "std_msgs"
-  "rcl"
-  "rmw")
+  "rcl")
 
 install(TARGETS
   latency
