@@ -23,7 +23,7 @@ ament_package()
 include_directories(include)
 
 add_executable(latency
-  src/monitor.cpp
+  src/latency.cpp
   src/options.cpp
 )
 ament_target_dependencies(latency

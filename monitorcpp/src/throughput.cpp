@@ -10,7 +10,7 @@
 #include "monitorcpp/optionsmonitor.hpp"
 
 
-// Message Callback, also calculates latency
+// Message Callback
 void receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,rclcpp::Logger logger)
 {
   RCLCPP_INFO(logger, "Received data of length %d ", msg->buffer_length);
