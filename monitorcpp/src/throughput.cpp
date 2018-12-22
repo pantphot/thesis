@@ -8,12 +8,46 @@
 #include "rclcpp/time_source.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "monitorcpp/optionsmonitor.hpp"
+#include <cstdio>
+#include "monitorcpp/statistics.hpp"
 
 
-// Message Callback
-void receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,rclcpp::Logger logger)
+using namespace std::chrono_literals;
+
+Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_qos_profile_t custom_qos_profile)
+: Node("throughput"),
+  count(0),
+  msg_type(msg_type),
+  topic(topic),
+  custom_qos_profile(custom_qos_profile),
+  buffer(0)
+  {
+    // Create Subscription to topic
+  sub = this->create_subscription<sensor_msgs::msg::Image>(
+        topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
+
+  periodic_timer = this->create_wall_timer(
+      1s,
+      [this]()
+      {
+        // RCLCPP_INFO(this->get_logger(), "in periodic_timer callback");
+        RCLCPP_INFO(this->get_logger(), "Throughput = %lf Mbps",double(buffer)/131072);
+        buffer = 0;
+      });
+  }
+Throughput::~Throughput(){}
+
+// Callback Function Receiving data
+void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
 {
-  RCLCPP_INFO(logger, "Received data of length %d ", msg->buffer_length);
+    receive_msg(msg, this->get_logger());
+}
+
+void Throughput::receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,rclcpp::Logger logger)
+{
+  buffer = buffer + msg->buffer_length;
+  // RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
+  RCLCPP_INFO(logger, "Buffer size %ld ",  buffer);
 }
 
 int main(int argc, char * argv[])
@@ -45,25 +79,31 @@ int main(int argc, char * argv[])
   custom_qos_profile.depth = depth;
   custom_qos_profile.reliability = reliability_policy;
   custom_qos_profile.history = history_policy;
-
+  if (reliability_policy==1)
+    std::cout << "/* Reliable */" << '\n';
+  else
+    std::cout << "/* Best effort */" << '\n';
   //Initialize a ROS node
-  auto node = rclcpp::Node::make_shared("throughput");
+  // auto node = rclcpp::Node::make_shared("throughput");
+  // auto node = std::make_shared<Throughput>();
+  //
+  // //Declaration of callback function for receiving messages
+  // auto callback = [&node](const std::shared_ptr<rmw_serialized_message_t>msg)
+  // {
+  //   receive_msg(msg, node->get_logger());
+  // };
 
-  //Declaration of callback function for receiving messages
-  auto callback = [&node](const std::shared_ptr<rmw_serialized_message_t>msg)
-  {
-    receive_msg(msg, node->get_logger());
-  };
+  // std::cerr << "Subscribing to topic ' " << topic << "'" << std::endl;
+  // RCLCPP_INFO(node->get_logger(), "Subscribing to topic '%s'", topic.c_str());
 
-  std::cerr << "Subscribing to topic ' " << topic << "'" << std::endl;
-  RCLCPP_INFO(node->get_logger(), "Subscribing to topic '%s'", topic.c_str());
+  // // Initialize a subscriber that will receive the ROS Image message to be displayed.
+  // rclcpp::Subscription<rmw_serialized_message_t>::SharedPtr sub = node->create_subscription<sensor_msgs::msg::Image>(
+  //   topic.c_str(), callback, custom_qos_profile);
+  //
+  // std::cerr << "Spinning" << std::endl;
 
-  // Initialize a subscriber that will receive the ROS Image message to be displayed.
-  rclcpp::Subscription<rmw_serialized_message_t>::SharedPtr sub = node->create_subscription<sensor_msgs::msg::Image>(
-    topic.c_str(), callback, custom_qos_profile);
-
-  std::cerr << "Spinning" << std::endl;
-  rclcpp::spin(node);
+  //Initialize a Throughput object (ROS node)
+  rclcpp::spin(std::make_shared<Throughput>(msg_type, topic, custom_qos_profile));
 
   std::cerr << "Shutdown" << std::endl;
   rclcpp::shutdown();
