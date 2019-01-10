@@ -43,7 +43,6 @@ void CalculateStatistics::callback(const std::shared_ptr<sensor_msgs::msg::Image
 {
     receive_msg(msg, this->get_logger());
 }
-// TODO convert in secods
 
 void CalculateStatistics::sample(const rclcpp::Time time_received, const rclcpp::Time time_sent, rclcpp::Logger logger){
   n_msgs_received+=1;

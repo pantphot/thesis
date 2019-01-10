@@ -20,7 +20,9 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
   msg_type(msg_type),
   topic(topic),
   custom_qos_profile(custom_qos_profile),
-  buffer(0)
+  buffer(0),
+  throughput(0),
+  throughput_avg(0)
   {
     // Create Subscription to topic
   sub = this->create_subscription<sensor_msgs::msg::Image>(
@@ -31,7 +33,11 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
       [this]()
       {
         // RCLCPP_INFO(this->get_logger(), "in periodic_timer callback");
-        RCLCPP_INFO(this->get_logger(), "Throughput = %lf Mbps",double(buffer)/131072);
+
+        throughput = double(buffer)/131072;
+        throughput_avg = (count * throughput_avg + throughput) / (count + 1);
+        RCLCPP_INFO(this->get_logger(), "Throughput = %lf Mbps",throughput_avg);
+        count +=1;
         buffer = 0;
       });
   }
@@ -47,7 +53,7 @@ void Throughput::receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,
 {
   buffer = buffer + msg->buffer_length;
   // RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
-  RCLCPP_INFO(logger, "Buffer size %ld ",  buffer);
+  // RCLCPP_INFO(logger, "Buffer size %ld ",  buffer);
 }
 
 int main(int argc, char * argv[])
