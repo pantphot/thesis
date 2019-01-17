@@ -3,4 +3,4 @@ float64 jitter
 
 StatisticsMeasurements latency
 
-StatisticsMeasurements freq
+StatisticsMeasurements frequency

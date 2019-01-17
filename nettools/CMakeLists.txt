@@ -18,8 +18,11 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rmw REQUIRED)
 find_package(nettools_msgs REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 
 include_directories(include)
+
+ament_python_install_package(scripts/)
 
 add_executable(latency
   src/latency.cpp
@@ -49,5 +52,10 @@ install(TARGETS
   latency
   throughput
   DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/nettools_plotter.py
+  DESTINATION bin)
+
 
 ament_package()

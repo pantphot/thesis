@@ -28,8 +28,8 @@ latency_avg_last(0),
 latency_last(0),
 received_msg_id(0),
 current_msg(0),
-freq(0),
-freq_avg_last(0),
+frequency(0),
+frequency_avg_last(0),
 latest_sample()
 {
   // Initialize a subscriber that will receive the ROS Image message to be displayed.
@@ -89,26 +89,26 @@ void CalculateStatistics::sample(const rclcpp::Time time_received, const rclcpp:
     }
   }
 
-  // Compute receiving frequency
+  // Compute receiving frequencyuency
   if (n_msgs_received < 2){
-    freq = 0.0;
+    frequency = 0.0;
     latest_sample = time_received;
   }
   else if (n_msgs_received == 2){
-    freq = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
+    frequency = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
     latest_sample = time_received;
-    msg_out.freq.avg = freq;
-    msg_out.freq.min = freq;
-    msg_out.freq.max = freq;
+    msg_out.frequency.avg = frequency;
+    msg_out.frequency.min = frequency;
+    msg_out.frequency.max = frequency;
   }
   else{
-    freq = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
+    frequency = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
     latest_sample = time_received;
-    freq_avg_last = msg_out.freq.avg;
-    msg_out.freq.avg += (freq - msg_out.freq.avg)/double(n_msgs_received - 1);
-    msg_out.freq.std =  std::sqrt(((n_msgs_received - 2) * std::pow(msg_out.freq.std,2) + (freq - msg_out.freq.avg) * (freq - freq_avg_last)) / (n_msgs_received -1) );
-    msg_out.freq.min = (freq < msg_out.freq.min) ? (freq) : (msg_out.freq.min);
-    msg_out.freq.max = (freq > msg_out.freq.max) ? (freq) : (msg_out.freq.max);
+    frequency_avg_last = msg_out.frequency.avg;
+    msg_out.frequency.avg += (frequency - msg_out.frequency.avg)/double(n_msgs_received - 1);
+    msg_out.frequency.std =  std::sqrt(((n_msgs_received - 2) * std::pow(msg_out.frequency.std,2) + (frequency - msg_out.frequency.avg) * (frequency - frequency_avg_last)) / (n_msgs_received -1) );
+    msg_out.frequency.min = (frequency < msg_out.frequency.min) ? (frequency) : (msg_out.frequency.min);
+    msg_out.frequency.max = (frequency > msg_out.frequency.max) ? (frequency) : (msg_out.frequency.max);
   }
 
 
@@ -120,11 +120,11 @@ void CalculateStatistics::sample(const rclcpp::Time time_received, const rclcpp:
   // RCLCPP_INFO(logger, "Latency_max %lf ms", msg_out.latency.max);
   // RCLCPP_INFO(logger, "Jitter %lf ", msg_out.jitter);
   // // RCLCPP_INFO(logger, "Message Loss %d ",msg_out.msg_loss);
-  // RCLCPP_INFO(logger, "frequency %lf Hz", freq);
-  // RCLCPP_INFO(logger, "Average frequency %lf Hz", msg_out.freq.avg);
-  // RCLCPP_INFO(logger, "Std frequency %lf Hz", msg_out.freq.std);
-  // RCLCPP_INFO(logger, "Min frequency %lf Hz ", msg_out.freq.min);
-  // RCLCPP_INFO(logger, "Max frequency %lf Hz", msg_out.freq.max);
+  // RCLCPP_INFO(logger, "frequencyuency %lf Hz", frequency);
+  // RCLCPP_INFO(logger, "Average frequencyuency %lf Hz", msg_out.frequency.avg);
+  // RCLCPP_INFO(logger, "Std frequencyuency %lf Hz", msg_out.frequency.std);
+  // RCLCPP_INFO(logger, "Min frequencyuency %lf Hz ", msg_out.frequency.min);
+  // RCLCPP_INFO(logger, "Max frequencyuency %lf Hz", msg_out.frequency.max);
   pub->publish(msg_out);
   // auto done_calc = clock->now();
   // auto calc_time = done_calc.nanoseconds() - begin_calc.nanoseconds();

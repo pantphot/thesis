@@ -26,8 +26,8 @@
       rclcpp::Clock::SharedPtr clock;
       int received_msg_id;
       int current_msg;
-      double freq;
-      double freq_avg_last;
+      double frequency;
+      double frequency_avg_last;
       rclcpp::Time latest_sample;
   };
 

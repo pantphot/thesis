@@ -25,7 +25,7 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
   {
 
   //Create publisher
-  pub = this->create_publisher<std_msgs::msg::Float64>("throughput",custom_qos_profile);
+  pub = this->create_publisher<std_msgs::msg::Float64>("topic_statistics",custom_qos_profile);
 
   // Create Subscription to topic
   sub = this->create_subscription<sensor_msgs::msg::Image>(
