@@ -57,7 +57,6 @@ class NettoolsPlotter(Node):
             self.std, = self.ax.plot([],[],color= 'g',label=str(self.stat + ' std'))
             self.min, = self.ax.plot([],[],color= 'r',label=str(self.stat + ' min'))
             self.max, = self.ax.plot([],[],color= 'c',label=str(self.stat + ' max'))
-            # self.ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=2)
         else:
             self.line, = self.ax.plot([],[],color= 'b',label=self.stat)
 
@@ -69,7 +68,7 @@ class NettoolsPlotter(Node):
         box = self.ax.get_position()
         self.ax.set_position(
             [box.x0, box.y0 + box.height * shrink_amnt, box.width, box.height * (1 - shrink_amnt)])
-        # # self.latency_avg = []
+
     def plot_callback(self, msg):
         self.count +=1
         self.x_data.append(self.count)
@@ -117,9 +116,6 @@ class NettoolsPlotter(Node):
         self.ax.autoscale_view(True,True,True)
         self.fig.canvas.draw()
         plt.pause(0.0001)
-
-
-    # def update_display(self,msg):
 
 # ######################################################################
 def main(argv=sys.argv[1:]):
