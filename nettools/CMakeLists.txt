@@ -19,6 +19,7 @@ find_package(std_msgs REQUIRED)
 find_package(rmw REQUIRED)
 find_package(nettools_msgs REQUIRED)
 find_package(ament_cmake_python REQUIRED)
+find_package(python_cmake_module REQUIRED)
 
 include_directories(include)
 
@@ -55,7 +56,7 @@ install(TARGETS
 
 install(PROGRAMS
   scripts/nettools_plotter.py
-  DESTINATION bin)
+  DESTINATION lib/${PROJECT_NAME})
 
 
 ament_package()

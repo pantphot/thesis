@@ -10,7 +10,7 @@
 #include "nettools/options.hpp"
 #include <cstdio>
 #include "nettools/throughput.hpp"
-
+// #include ".h"
 
 using namespace std::chrono_literals;
 
@@ -25,7 +25,7 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
   {
 
   //Create publisher
-  pub = this->create_publisher<std_msgs::msg::Float64>("topic_statistics",custom_qos_profile);
+  pub = this->create_publisher<std_msgs::msg::Float64>("topic_statistics",rmw_qos_profile_default);
 
   // Create Subscription to topic
   sub = this->create_subscription<sensor_msgs::msg::Image>(
@@ -58,8 +58,9 @@ void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
 void Throughput::receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,rclcpp::Logger logger)
 {
   buffer = buffer + msg->buffer_length;
-  // RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
-  // RCLCPP_INFO(logger, "Buffer size %ld ",  buffer);
+  // if (count==1){
+  //   RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
+  // };
 }
 
 int main(int argc, char * argv[])

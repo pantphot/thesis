@@ -34,7 +34,7 @@ latest_sample()
 {
   // Initialize a subscriber that will receive the ROS Image message to be displayed.
   std::cerr << "Subscribing to topic ' " << topic << "'" << std::endl;
-  pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics",custom_qos_profile);
+  pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics",rmw_qos_profile_default);
   sub = this->create_subscription<sensor_msgs::msg::Image>(
       topic.c_str(), std::bind(&CalculateStatistics::callback, this,  std::placeholders::_1),custom_qos_profile);
   clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);

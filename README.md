@@ -4,7 +4,7 @@
 3. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package.
 
 ## Prerequisites
-1. ROS2 bouncy
+1. ROS2 bouncy or crystal
 2. python3
 3. matplotlib
 
@@ -45,5 +45,6 @@ ros2 topic echo /topic_statistics
 
 To view real-time plot for a given statistic run the nettools_plotter.py script followed by the statistic you want to plot e.g.:
 ```
-python3 ros2_overlay_ws/src/nettools/scripts/nettools_plotter.py latency
+ros2 run nettools nettools_plotter.py latency
 ```
+*To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py) 
