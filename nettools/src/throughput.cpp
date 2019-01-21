@@ -10,7 +10,7 @@
 #include "nettools/options.hpp"
 #include <cstdio>
 #include "nettools/throughput.hpp"
-// #include ".h"
+#include "nettools_msgs/msg/byte_array.hpp"
 
 using namespace std::chrono_literals;
 
@@ -28,7 +28,9 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
   pub = this->create_publisher<std_msgs::msg::Float64>("topic_statistics",rmw_qos_profile_default);
 
   // Create Subscription to topic
-  sub = this->create_subscription<sensor_msgs::msg::Image>(
+  // sub = this->create_subscription<sensor_msgs::msg::Image>(
+  //       topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
+  sub = this->create_subscription<nettools_msgs::msg::ByteArray>(
         topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
 
   periodic_timer = this->create_wall_timer(
@@ -59,7 +61,7 @@ void Throughput::receive_msg(const std::shared_ptr<rmw_serialized_message_t>msg,
 {
   buffer = buffer + msg->buffer_length;
   // if (count==1){
-  //   RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
+  RCLCPP_INFO(logger, "Received data of length %ld ",  msg->buffer_length);
   // };
 }
 

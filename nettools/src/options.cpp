@@ -1,5 +1,3 @@
-
-
 #include <algorithm>
 #include <iostream>
 #include <sstream>
@@ -53,7 +51,7 @@ bool parse_command_options(
     ss << "    0 - only store up to N samples, configurable via the queue depth (default)" <<
       std::endl;
     ss << "    1 - keep all the samples" << std::endl;
-    ss << " -m: Message Type instead of default(sensor_msgs.msg.Image):" << std::endl;
+    ss << " -m: Message Type instead of default(sensor_msgs.msg.Image)" << std::endl;
     ss << " -t TOPIC: use topic TOPIC instead of the default(image)" << std::endl;
     std::cout << ss.str();
     return false;
@@ -90,8 +88,5 @@ bool parse_command_options(
     }
 
   }
-
-
-
   return true;
 }

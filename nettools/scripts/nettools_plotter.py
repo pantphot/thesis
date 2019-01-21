@@ -5,7 +5,6 @@
 # Created by Pantelis Photiou, at Jan 2018
 import argparse
 import sys
-import signal
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 import rclpy
@@ -21,6 +20,7 @@ class NettoolsPlotter(Node):
         self.stat = stat
         self.x_data = []
         self.y_data = []
+        self.y_data_val = []
         self.y_data_avg = []
         self.y_data_std = []
         self.y_data_min = []
@@ -37,7 +37,7 @@ class NettoolsPlotter(Node):
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
             plt.ylabel('Latency (ms)')
-            plt.ylim(0.0,4000.0)
+            plt.ylim(0.0,500.0)
         elif self.stat == 'frequency':
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
@@ -53,12 +53,13 @@ class NettoolsPlotter(Node):
         plt.grid(True)
         self.ax = self.fig.add_subplot(111)
         if (self.stat == 'latency' or self.stat == 'frequency'):
+            self.val, = self.ax.plot([],[],color= 'r',label=str(self.stat))
             self.avg, = self.ax.plot([],[],color= 'b',label=str(self.stat + ' avg'))
             self.std, = self.ax.plot([],[],color= 'g',label=str(self.stat + ' std'))
-            self.min, = self.ax.plot([],[],color= 'r',label=str(self.stat + ' min'))
+            self.min, = self.ax.plot([],[],color= 'y',label=str(self.stat + ' min'))
             self.max, = self.ax.plot([],[],color= 'c',label=str(self.stat + ' max'))
         else:
-            self.line, = self.ax.plot([],[],color= 'b',label=self.stat)
+            self.line, = self.ax.plot([],[],color= 'r',label=self.stat)
 
         self.ax.legend(
             loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=2)
@@ -74,6 +75,8 @@ class NettoolsPlotter(Node):
         self.count +=1
         self.x_data.append(self.count)
         if (self.stat == 'latency'):
+            self.y_data_val.append(msg.latency.val)
+            self.val.set_ydata(self.y_data_val)
             self.y_data_avg.append(msg.latency.avg)
             self.avg.set_ydata(self.y_data_avg)
             self.y_data_std.append(msg.latency.std)
@@ -82,14 +85,16 @@ class NettoolsPlotter(Node):
             self.min.set_ydata(self.y_data_min)
             self.y_data_max.append(msg.latency.max)
             self.max.set_ydata(self.y_data_max)
+
+            self.val.set_xdata(self.x_data)
             self.avg.set_xdata(self.x_data)
             self.std.set_xdata(self.x_data)
             self.min.set_xdata(self.x_data)
             self.max.set_xdata(self.x_data)
         elif (self.stat == 'frequency'):
+            self.y_data_val.append(msg.frequency.val)
+            self.val.set_ydata(self.y_data_val)
             self.y_data_avg.append(msg.frequency.avg)
-            print(msg.frequency.avg)
-
             self.avg.set_ydata(self.y_data_avg)
             self.y_data_std.append(msg.frequency.std)
             self.std.set_ydata(self.y_data_std)
@@ -97,6 +102,7 @@ class NettoolsPlotter(Node):
             self.min.set_ydata(self.y_data_min)
             self.y_data_max.append(msg.frequency.max)
             self.max.set_ydata(self.y_data_max)
+            self.val.set_xdata(self.x_data)
             self.avg.set_xdata(self.x_data)
             self.std.set_xdata(self.x_data)
             self.min.set_xdata(self.x_data)

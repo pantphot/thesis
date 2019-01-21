@@ -11,11 +11,32 @@
 #include "sensor_msgs/msg/image.hpp"
 #include "nettools/options.hpp"
 #include "nettools/latency.hpp"
+#include "nettools_msgs/msg/byte_array.hpp"
+
 // #include "nettools_msgs/msg/statistics_measurements.hpp"
 // #include "nettools_msgs/msg/topic_statistics.hpp"
-
-
-
+// enum MsgType {
+//   Image, ByteArray
+// };
+//
+// class Msg {
+// public:
+//   static Msg* Create(MsgType type);
+// };
+// class Image : public Msg{
+//   return sensor_msgs::msg::Image;
+// }
+// class ByteArray : public Msg{
+//   return nettools_msgs::msg::ByteArray;
+// }
+//
+// Msg* Msg::Create(MsgType,type){
+//   if (type == 'image')
+//     return new Image();
+//   else if (type == 'bytearray')
+//     return new ByteArray();
+//   else return NULL;
+// }
 
 CalculateStatistics::CalculateStatistics(const std::string msg_type, const std::string topic,rmw_qos_profile_t custom_qos_profile)
 : Node("latency"),
@@ -23,36 +44,35 @@ msg_type(msg_type),
 topic(topic),
 custom_qos_profile(custom_qos_profile),
 n_msgs_received(0),
-latency(0),
 latency_avg_last(0),
 latency_last(0),
 received_msg_id(0),
 current_msg(0),
-frequency(0),
 frequency_avg_last(0),
 latest_sample()
 {
   // Initialize a subscriber that will receive the ROS Image message to be displayed.
   std::cerr << "Subscribing to topic ' " << topic << "'" << std::endl;
   pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics",rmw_qos_profile_default);
-  sub = this->create_subscription<sensor_msgs::msg::Image>(
+  //******************************************************************************************************************
+  sub = this->create_subscription<nettools_msgs::msg::ByteArray>(
       topic.c_str(), std::bind(&CalculateStatistics::callback, this,  std::placeholders::_1),custom_qos_profile);
   clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
 
 }
 
 CalculateStatistics::~CalculateStatistics(){}
-
-void CalculateStatistics::callback(const std::shared_ptr<sensor_msgs::msg::Image> msg)
+// *******************************************************************************************************************
+void CalculateStatistics::callback(const std::shared_ptr<nettools_msgs::msg::ByteArray> msg)
 {
     receive_msg(msg, this->get_logger());
 }
-
-void CalculateStatistics::receive_msg(const std::shared_ptr<sensor_msgs::msg::Image> msg,rclcpp::Logger logger)
+// ********************************************************************************************************************
+void CalculateStatistics::receive_msg(const std::shared_ptr<nettools_msgs::msg::ByteArray> msg,rclcpp::Logger logger)
 {
   auto time_received = clock->now();
   received_msg_id = std::stoi (msg->header.frame_id,nullptr,10);
-  RCLCPP_INFO(logger, "Received image #%d", received_msg_id);
+  RCLCPP_INFO(logger, "Received message #%d", received_msg_id);
   auto time_sent = rclcpp::Time( msg->header.stamp.sec, msg->header.stamp.nanosec,RCL_SYSTEM_TIME);
   sample(time_received,time_sent,received_msg_id,logger);
 }
@@ -61,20 +81,20 @@ void CalculateStatistics::sample(const rclcpp::Time time_received, const rclcpp:
   n_msgs_received+=1;
   //Compute the latency
   // auto begin_calc = clock->now();
-  latency = time_received.nanoseconds() - time_sent.nanoseconds();
-  latency =  RCL_NS_TO_MS(latency);
+  msg_out.latency.val = time_received.nanoseconds() - time_sent.nanoseconds();
+  msg_out.latency.val =  RCL_NS_TO_MS(msg_out.latency.val);
   latency_avg_last = msg_out.latency.avg;
-  msg_out.latency.avg += (latency - msg_out.latency.avg )/double(n_msgs_received);
-  msg_out.latency.std = std::sqrt(((n_msgs_received - 1) * std::pow(msg_out.latency.std,2) + (latency - msg_out.latency.avg) * (latency - latency_avg_last)) / n_msgs_received);
-  if (n_msgs_received==1) msg_out.latency.min = latency;
-  msg_out.latency.min = (latency < msg_out.latency.min)?(latency):(msg_out.latency.min);
-  msg_out.latency.max = (latency > msg_out.latency.max)?(latency):(msg_out.latency.max);
+  msg_out.latency.avg += (msg_out.latency.val - msg_out.latency.avg )/double(n_msgs_received);
+  msg_out.latency.std = std::sqrt(((n_msgs_received - 1) * std::pow(msg_out.latency.std,2) + (msg_out.latency.val - msg_out.latency.avg) * (msg_out.latency.val - latency_avg_last)) / n_msgs_received);
+  if (n_msgs_received==1) msg_out.latency.min = msg_out.latency.val;
+  msg_out.latency.min = (msg_out.latency.val < msg_out.latency.min)?(msg_out.latency.val):(msg_out.latency.min);
+  msg_out.latency.max = (msg_out.latency.val > msg_out.latency.max)?(msg_out.latency.val):(msg_out.latency.max);
 
   // Interarrival jitter https://www.ietf.org/rfc/rfc3550.txt (mean deviation) packet length matters ,https://tools.ietf.org/html/rfc1889#appendix-A.8 example usage
   //          J(i) = J(i-1) + (|D(i-1,i)| - J(i-1))/16
   if (n_msgs_received > 1){
-    auto d = latency - latency_last;
-    latency_last = latency;
+    auto d = msg_out.latency.val - latency_last;
+    latency_last = msg_out.latency.val;
     if(d<0) d = -d;
     msg_out.jitter +=  (double(d) - msg_out.jitter)/16;// 16 noise reduction ratio
   }
@@ -91,24 +111,24 @@ void CalculateStatistics::sample(const rclcpp::Time time_received, const rclcpp:
 
   // Compute receiving frequencyuency
   if (n_msgs_received < 2){
-    frequency = 0.0;
+    msg_out.frequency.val = 0.0;
     latest_sample = time_received;
   }
   else if (n_msgs_received == 2){
-    frequency = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
+    msg_out.frequency.val = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
     latest_sample = time_received;
-    msg_out.frequency.avg = frequency;
-    msg_out.frequency.min = frequency;
-    msg_out.frequency.max = frequency;
+    msg_out.frequency.avg = msg_out.frequency.val;
+    msg_out.frequency.min = msg_out.frequency.val;
+    msg_out.frequency.max = msg_out.frequency.val;
   }
   else{
-    frequency = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
+    msg_out.frequency.val = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
     latest_sample = time_received;
     frequency_avg_last = msg_out.frequency.avg;
-    msg_out.frequency.avg += (frequency - msg_out.frequency.avg)/double(n_msgs_received - 1);
-    msg_out.frequency.std =  std::sqrt(((n_msgs_received - 2) * std::pow(msg_out.frequency.std,2) + (frequency - msg_out.frequency.avg) * (frequency - frequency_avg_last)) / (n_msgs_received -1) );
-    msg_out.frequency.min = (frequency < msg_out.frequency.min) ? (frequency) : (msg_out.frequency.min);
-    msg_out.frequency.max = (frequency > msg_out.frequency.max) ? (frequency) : (msg_out.frequency.max);
+    msg_out.frequency.avg += (msg_out.frequency.val - msg_out.frequency.avg)/double(n_msgs_received - 1);
+    msg_out.frequency.std =  std::sqrt(((n_msgs_received - 2) * std::pow(msg_out.frequency.std,2) + (msg_out.frequency.val - msg_out.frequency.avg) * (msg_out.frequency.val - frequency_avg_last)) / (n_msgs_received -1) );
+    msg_out.frequency.min = (msg_out.frequency.val < msg_out.frequency.min) ? (msg_out.frequency.val) : (msg_out.frequency.min);
+    msg_out.frequency.max = (msg_out.frequency.val > msg_out.frequency.max) ? (msg_out.frequency.val) : (msg_out.frequency.max);
   }
 
 

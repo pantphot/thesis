@@ -1,3 +1,4 @@
+float64 val
 float64 avg
 float64 std
 float64 min

@@ -47,7 +47,8 @@ ament_target_dependencies(throughput
   "rclcpp"
   "sensor_msgs"
   "std_msgs"
-  "rcl")
+  "rcl"
+  "nettools_msgs")
 
 install(TARGETS
   latency
@@ -56,6 +57,7 @@ install(TARGETS
 
 install(PROGRAMS
   scripts/nettools_plotter.py
+  scripts/variable_length_pub.py
   DESTINATION lib/${PROJECT_NAME})
 
 

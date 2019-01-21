@@ -13,10 +13,14 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
+
 
 rosidl_generate_interfaces(nettools_msgs
   "msg/StatisticsMeasurements.msg"
   "msg/TopicStatistics.msg"
+  "msg/ByteArray.msg"
+   DEPENDENCIES std_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()
