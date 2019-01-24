@@ -8,13 +8,9 @@
   class CalculateStatistics : public rclcpp::Node {
     public:
       CalculateStatistics(const std::string topic,rmw_qos_profile_t custom_qos_profile);
-
-      // *****************************************************************************************************************
       void callback(const std::shared_ptr<T> msg);
       void sample(const rclcpp::Time time_received, const rclcpp::Time time_sent,int received_msg_id, rclcpp::Logger logger);
-      // ******************************************************************************************************************
       void receive_msg(const std::shared_ptr<T> msg, rclcpp::Logger logger);
-      // *******************************************************************************************************************
       typename rclcpp::Subscription<T>::SharedPtr sub;
       rclcpp::Publisher<nettools_msgs::msg::TopicStatistics>::SharedPtr pub;
       ~CalculateStatistics();

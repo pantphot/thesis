@@ -31,8 +31,8 @@ class NettoolsPlotter(Node):
         if self.stat == 'throughput':
             self.sub = self.create_subscription(Float64, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Time (s)')
-            plt.ylabel('Throughput (Mbps)')
-            plt.ylim(0.0,10.0)
+            plt.ylabel('Throughput (Mb)')
+            plt.ylim(0.0,50.0)
         elif self.stat == 'latency':
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
@@ -59,8 +59,7 @@ class NettoolsPlotter(Node):
             self.min, = self.ax.plot([],[],color= 'y',label=str(self.stat + ' min'))
             self.max, = self.ax.plot([],[],color= 'c',label=str(self.stat + ' max'))
         else:
-            self.line, = self.ax.plot([],[],color= 'r',label=self.stat)
-
+            self.line, = self.ax.plot([],[],color= 'r',label=str(self.stat))
         self.ax.legend(
             loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=2)
         plt.show(block=False)
@@ -69,7 +68,6 @@ class NettoolsPlotter(Node):
         box = self.ax.get_position()
         self.ax.set_position(
             [box.x0, box.y0 + box.height * shrink_amnt, box.width, box.height * (1 - shrink_amnt)])
-        print('init finished')
 
     def plot_callback(self, msg):
         self.count +=1
@@ -109,19 +107,17 @@ class NettoolsPlotter(Node):
             self.max.set_xdata(self.x_data)
         elif (self.stat == 'msg_loss'):
             self.y_data.append(msg.msg_loss)
-            # logger_.info('%d' % (msg.msg_loss))
             self.line.set_ydata(self.y_data)
             self.line.set_xdata(self.x_data)
         elif (self.stat == 'jitter'):
             self.y_data.append(msg.jitter)
-            # logger_.info('%f' % (msg.jitter))
             self.line.set_ydata(self.y_data)
             self.line.set_xdata(self.x_data)
         elif (self.stat == 'throughput'):
             self.y_data.append(msg.data)
-            # logger_.info('%f' % (msg.data))
             self.line.set_ydata(self.y_data)
             self.line.set_xdata(self.x_data)
+
 
         self.ax.relim()
         self.ax.autoscale_view(True,True,True)

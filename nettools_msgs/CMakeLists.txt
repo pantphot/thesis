@@ -20,7 +20,7 @@ rosidl_generate_interfaces(nettools_msgs
   "msg/StatisticsMeasurements.msg"
   "msg/TopicStatistics.msg"
   "msg/ByteArray.msg"
-   DEPENDENCIES std_msgs
+  DEPENDENCIES std_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)
 ament_package()
