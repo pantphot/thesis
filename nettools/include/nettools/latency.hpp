@@ -1,10 +1,8 @@
 #ifndef __NETTOOLS_LATENCY_HPP
 #define __NETTOOLS_LATENCY_HPP
-  #include "sensor_msgs/msg/image.hpp"
   #include "rclcpp/rclcpp.hpp"
   #include "nettools_msgs/msg/statistics_measurements.hpp"
   #include "nettools_msgs/msg/topic_statistics.hpp"
-  #include "nettools_msgs/msg/byte_array.hpp"
 
   template<class T>
   class CalculateStatistics : public rclcpp::Node {

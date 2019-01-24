@@ -13,31 +13,6 @@
 #include "nettools/latency.hpp"
 #include "nettools_msgs/msg/byte_array.hpp"
 
-// #include "nettools_msgs/msg/statistics_measurements.hpp"
-// #include "nettools_msgs/msg/topic_statistics.hpp"
-// enum MsgType {
-//   Image, ByteArray
-// };
-//
-// class Msg {
-// public:
-//   static Msg* Create(MsgType type);
-// };
-// class Image : public Msg{
-//   return sensor_msgs::msg::Image;
-// }
-// class ByteArray : public Msg{
-//   return nettools_msgs::msg::ByteArray;
-// }
-//
-// Msg* Msg::Create(MsgType,type){
-//   if (type == 'image')
-//     return new Image();
-//   else if (type == 'bytearray')
-//     return new ByteArray();
-//   else return NULL;
-// }
-
 template<typename T>
 CalculateStatistics<T>::CalculateStatistics(const std::string topic,rmw_qos_profile_t custom_qos_profile)
 : Node("latency"),
@@ -51,10 +26,12 @@ current_msg(0),
 frequency_avg_last(0),
 latest_sample()
 {
-  // Initialize a subscriber that will receive the ROS Image message to be displayed.
+  // Initialize publisher that publishes network statistics
   std::cerr << "Subscribing to topic '" << topic << "'" << std::endl;
   pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics",rmw_qos_profile_default);
-  //******************************************************************************************************************
+
+  // Initialize a subscriber that will receive the ROS message to be used in calculating statistics.
+
   sub = this->create_subscription<T>(
       topic.c_str(), std::bind(&CalculateStatistics::callback, this,  std::placeholders::_1),custom_qos_profile);
   clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
@@ -62,13 +39,13 @@ latest_sample()
 }
 template<typename T>
 CalculateStatistics<T>::~CalculateStatistics(){}
-// *******************************************************************************************************************
+
 template<typename T>
 void CalculateStatistics<T>::callback(const std::shared_ptr<T> msg)
 {
     receive_msg(msg, this->get_logger());
 }
-// ********************************************************************************************************************
+
 template<typename T>
 void CalculateStatistics<T>::receive_msg(const std::shared_ptr<T> msg,rclcpp::Logger logger)
 {
@@ -132,26 +109,8 @@ void CalculateStatistics<T>::sample(const rclcpp::Time time_received, const rclc
     msg_out.frequency.min = (msg_out.frequency.val < msg_out.frequency.min) ? (msg_out.frequency.val) : (msg_out.frequency.min);
     msg_out.frequency.max = (msg_out.frequency.val > msg_out.frequency.max) ? (msg_out.frequency.val) : (msg_out.frequency.max);
   }
-
-
-  // RCLCPP_INFO(logger, "Latency %lf ms", latency);
-  // RCLCPP_INFO(logger, "Latency_avg %lf ms", msg_out.latency.avg);
-  // // RCLCPP_INFO(logger, "Latency_avg %lf ms",latency_avg);
-  // RCLCPP_INFO(logger, "Latency_std %lf ", msg_out.latency.std);
-  // RCLCPP_INFO(logger, "Latency_min %lf ms", msg_out.latency.min);
-  // RCLCPP_INFO(logger, "Latency_max %lf ms", msg_out.latency.max);
-  // RCLCPP_INFO(logger, "Jitter %lf ", msg_out.jitter);
-  // // RCLCPP_INFO(logger, "Message Loss %d ",msg_out.msg_loss);
-  // RCLCPP_INFO(logger, "frequencyuency %lf Hz", frequency);
-  // RCLCPP_INFO(logger, "Average frequencyuency %lf Hz", msg_out.frequency.avg);
-  // RCLCPP_INFO(logger, "Std frequencyuency %lf Hz", msg_out.frequency.std);
-  // RCLCPP_INFO(logger, "Min frequencyuency %lf Hz ", msg_out.frequency.min);
-  // RCLCPP_INFO(logger, "Max frequencyuency %lf Hz", msg_out.frequency.max);
+  //Publish topic statistics message
   pub->publish(msg_out);
-  // auto done_calc = clock->now();
-  // auto calc_time = done_calc.nanoseconds() - begin_calc.nanoseconds();
-  // RCLCPP_INFO(logger, "Time for calculations %ld ns", calc_time);
-
 }
 
 int main(int argc, char * argv[])
