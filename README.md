@@ -47,5 +47,5 @@ To view real-time plot for a given statistic run the nettools_plotter.py script 
 ```
 ros2 run nettools nettools_plotter.py latency
 ```
-*To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py)
+*To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py) <br />
 *The nettools latency node subscribes to topics where there is a header included in the message published. To add more topic types add new else if in latency.cpp main() (line 155) and include the message definition in the includes section  
