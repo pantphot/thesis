@@ -6,17 +6,18 @@
   #include "nettools_msgs/msg/topic_statistics.hpp"
   #include "nettools_msgs/msg/byte_array.hpp"
 
-
+  template<class T>
   class CalculateStatistics : public rclcpp::Node {
     public:
-      CalculateStatistics(const std::string msg_type, const std::string topic,rmw_qos_profile_t custom_qos_profile);
+      CalculateStatistics(const std::string topic,rmw_qos_profile_t custom_qos_profile);
+
       // *****************************************************************************************************************
-      void callback(const std::shared_ptr<nettools_msgs::msg::ByteArray> msg);
+      void callback(const std::shared_ptr<T> msg);
       void sample(const rclcpp::Time time_received, const rclcpp::Time time_sent,int received_msg_id, rclcpp::Logger logger);
       // ******************************************************************************************************************
-      void receive_msg(const std::shared_ptr<nettools_msgs::msg::ByteArray> msg, rclcpp::Logger logger);
+      void receive_msg(const std::shared_ptr<T> msg, rclcpp::Logger logger);
       // *******************************************************************************************************************
-      rclcpp::Subscription<nettools_msgs::msg::ByteArray>::SharedPtr sub;
+      typename rclcpp::Subscription<T>::SharedPtr sub;
       rclcpp::Publisher<nettools_msgs::msg::TopicStatistics>::SharedPtr pub;
       ~CalculateStatistics();
 
