@@ -1,5 +1,5 @@
-#ifndef NETTOOLS__OPTIONS_HPP_
-#define NETTOOLS__OPTIONS_HPP_
+#ifndef NETTOOLS__VAR_LEN_OPTIONS_HPP_
+#define NETTOOLS__VAR_LEN_OPTIONS_HPP_
 
 #include <string>
 #include <vector>
@@ -37,8 +37,7 @@ bool parse_command_options(
   int argc, char ** argv, size_t * depth,
   rmw_qos_reliability_policy_t * reliability_policy,
   rmw_qos_history_policy_t * history_policy,
-  std::string * msg_type = nullptr,
-  std::string * topic = nullptr);
-  
+  int * freq = nullptr,
+  int * step = nullptr);
 
 #endif  //

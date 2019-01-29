@@ -48,11 +48,25 @@ ament_target_dependencies(throughput
   "sensor_msgs"
   "std_msgs"
   "rcl"
-  "nettools_msgs")
+  "nettools_msgs"
+  "rmw")
+
+add_executable(variable_length_pub
+  src/var_len_options.cpp
+  src/variable_length_pub.cpp
+  )
+
+ament_target_dependencies(variable_length_pub
+  "rclcpp"
+  "std_msgs"
+  "rcl"
+  "nettools_msgs"
+  "rmw")
 
 install(TARGETS
   latency
   throughput
+  variable_length_pub
   DESTINATION lib/${PROJECT_NAME})
 
 install(PROGRAMS

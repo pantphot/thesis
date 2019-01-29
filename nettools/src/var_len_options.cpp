@@ -33,8 +33,8 @@ bool parse_command_options(
   int argc, char ** argv, size_t * depth,
   rmw_qos_reliability_policy_t * reliability_policy,
   rmw_qos_history_policy_t * history_policy,
-  std::string * msg_type,
-  std::string * topic)
+  int * freq,
+  int * step)
 {
   std::vector<std::string> args(argv, argv + argc);
 
@@ -51,8 +51,8 @@ bool parse_command_options(
     ss << "    0 - only store up to N samples, configurable via the queue depth (default)" <<
       std::endl;
     ss << "    1 - keep all the samples" << std::endl;
-    ss << "  -m: Message Type: accepted (image, bytearray)" << std::endl;
-    ss << "  -t TOPIC: use topic TOPIC instead of the default(image)" << std::endl;
+    ss << " -f: Publish frequency in Hz. 30 (default)" << std::endl;
+    ss << " -s: Message length increment step in kB. (default = 1kB)" << std::endl;
     std::cout << ss.str();
     return false;
   }
@@ -60,6 +60,20 @@ bool parse_command_options(
   auto depth_str = get_command_option(args, "-d");
   if (!depth_str.empty()) {
     *depth = std::stoul(depth_str.c_str());
+  }
+
+  if (freq != nullptr) {
+    auto freq_str = get_command_option(args, "-f");
+    if (!freq_str.empty()) {
+      *freq = std::stoi(freq_str.c_str());
+    }
+  }
+
+  if (step != nullptr) {
+    auto step_str = get_command_option(args, "-s");
+    if (!step_str.empty()) {
+      *step = std::stoi(step_str.c_str());
+    }
   }
 
   auto reliability_str = get_command_option(args, "-r");
@@ -74,19 +88,6 @@ bool parse_command_options(
     unsigned int r = std::stoul(history_str.c_str());
     *history_policy = r ? RMW_QOS_POLICY_HISTORY_KEEP_ALL : RMW_QOS_POLICY_HISTORY_KEEP_LAST;
   }
-  if (msg_type != nullptr) {
-    std::string tmpmsg = get_command_option(args, "-m");
-    if (!tmpmsg.empty()) {
-      *msg_type = tmpmsg;
-    }
 
-  }
-  if (topic != nullptr) {
-    std::string tmptopic = get_command_option(args, "-t");
-    if (!tmptopic.empty()) {
-      *topic = tmptopic;
-    }
-
-  }
   return true;
 }
