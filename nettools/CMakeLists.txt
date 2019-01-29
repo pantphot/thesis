@@ -13,7 +13,6 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rcl REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rmw REQUIRED)
@@ -47,7 +46,6 @@ ament_target_dependencies(throughput
   "rclcpp"
   "sensor_msgs"
   "std_msgs"
-  "rcl"
   "nettools_msgs"
   "rmw")
 
@@ -58,8 +56,6 @@ add_executable(variable_length_pub
 
 ament_target_dependencies(variable_length_pub
   "rclcpp"
-  "std_msgs"
-  "rcl"
   "nettools_msgs"
   "rmw")
 

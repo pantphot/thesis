@@ -1,3 +1,10 @@
+/*
+*   options.cpp
+*   Author: Pantelis Photiou
+*   Created: Jan 2019
+*   Helper file for parsing console arguments for latency
+*   and throughput tests
+*/
 #include <algorithm>
 #include <iostream>
 #include <sstream>

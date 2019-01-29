@@ -1,3 +1,11 @@
+/*
+*   latency.cpp
+*   Author: Pantelis Photiou
+*   Created: Jan 2019
+*   Initializes a ROS 2 node which subcribes on certain topics and
+*   calculates certain topic statistics, which then publishes on topic
+*   topic_statistics
+*/
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -6,7 +14,6 @@
 #include "rclcpp/clock.hpp"
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
-#include "rcl/time.h"
 #include <cmath>
 #include "sensor_msgs/msg/image.hpp"
 #include "nettools/options.hpp"
@@ -51,7 +58,7 @@ void CalculateStatistics<T>::receive_msg(const std::shared_ptr<T> msg,rclcpp::Lo
 {
   auto time_received = clock->now();
   received_msg_id = std::stoi (msg->header.frame_id,nullptr,10);
-  RCLCPP_INFO(logger, "Received message #%d", received_msg_id);
+  // RCLCPP_INFO(logger, "Received message #%d", received_msg_id);
   auto time_sent = rclcpp::Time( msg->header.stamp.sec, msg->header.stamp.nanosec,RCL_SYSTEM_TIME);
   sample(time_received,time_sent,received_msg_id,logger);
 }

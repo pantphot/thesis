@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-
-# license removed for brevity
-# This scripts runs a node that subscribes on topic statistics and plots the given network statistic
-# Created by Pantelis Photiou, at Jan 2018
+#
+#   nettoools_plotter.py
+#   Author: Pantelis Photiou
+#   Created: Jan 2019
+#   This script implements a ROS2 node which subscribes on topic
+#   topic_statistics and plots latency, throughput, receiving frequency,
+#   jitter and message loss statistics calculated by latency.cpp and throughput.cpp
+#
 import argparse
 import sys
 import matplotlib.pyplot as plt

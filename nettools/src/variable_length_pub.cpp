@@ -1,3 +1,10 @@
+/*
+*   variable_length_pub.cpp
+*   Author: Pantelis Photiou
+*   Created: Jan 2019
+*   Implements a ROS 2 node which publishes variable length char arrays,
+*   on topic variable_length, used for tests.
+*/
 #include <cstdio>
 #include <iostream>
 #include <memory>

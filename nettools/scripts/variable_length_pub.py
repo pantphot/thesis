@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-    # This scripts runs a node that publishes variable length messages
-# Created by Pantelis Photiou, at Jan 2018
-
+#
+#   variable_length_pub.py
+#   Author: Pantelis Photiou
+#   Created: Jan 2019
+#   This script implements a ROS 2 node which publishes variable length char arrays,
+#   on topic variable_length, used for tests.
+#   Note: Runs only with ROS 2 crystal release (depends on rclpy.time)
+#
 import argparse
 import sys
 
@@ -12,8 +17,7 @@ from rclpy.qos import QoSReliabilityPolicy
 from rclpy.time import Time
 from rclpy.clock import Clock
 from std_msgs.msg import Header
-from collections.abc import Set
-import timeit
+
 
 from nettools_msgs.msg import ByteArray
 

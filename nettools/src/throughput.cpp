@@ -1,3 +1,11 @@
+/*
+*   throughput.cpp
+*   Author: Pantelis Photiou
+*   Created: Jan 2019
+*   Initializes a ROS 2 node which subcribes on certain topics and
+*   calculates the throughput of given topic, which then publishes on topic
+*   topic_statistics
+*/
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -61,7 +69,6 @@ Throughput::~Throughput(){}
 void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
 {
   buffer = buffer + msg->buffer_length;
-  std::cout << "/* Received msg of length =" << msg->buffer_length<<'\n';
 }
 
 int main(int argc, char * argv[])

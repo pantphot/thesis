@@ -1,3 +1,9 @@
+/*
+*   var_len_options.cpp
+*   Author: Pantelis Photiou
+*   Created: Jan 2019
+*   Helper file for parsing console arguments for variable_length_pub
+*/
 #include <algorithm>
 #include <iostream>
 #include <sstream>
