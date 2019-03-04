@@ -1,0 +1,38 @@
+<?xml version="1.0"encoding="UTF-8"?>
+  <profiles>
+
+    <participant profile_name="participant_profile_sub">
+      <rtps>
+        <name>listener</name>
+        <builtin>
+          <domainId>3</domainId>
+          <leaseDuration>
+            <durationbyname>INFINITE</durationbyname>
+          </leaseDuration>
+        </builtin>
+      </rtps>
+    </participant>
+
+    <subscriber profile_name="subscriber_profile">
+      <topic>
+        <kind>NO_KEY</kind>
+        <name>image</name> <!-- string den exei simmasia-->
+        <dataType>image</dataType> <!-- string -->
+        <historyQos>
+          <kind>KEEP_LAST</kind> <!-- string -->
+          <depth>20</depth> <!-- uint32 -->
+        </historyQos>
+      </topic>
+      <qos>
+        <durability>
+          <kind>VOLATILE</kind> <!-- string -->
+        </durability>
+        <liveliness>
+          <kind>AUTOMATIC</kind> <!-- string -->
+        </liveliness>
+        <reliability>
+          <kind>BEST_EFFORT</kind>
+        </reliability>
+      </qos>
+    </subscriber>
+  </profiles>
