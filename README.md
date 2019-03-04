@@ -62,7 +62,7 @@ To view a real-time plot for a given statistic run the nettools_plotter.py scrip
 ros2 run nettools nettools_plotter.py latency
 ```
 ## face_detection package
-If you want to run the face detection algorithm on the publisher side:
+If you want to run the face detection algorithm on the publisher side:<br />
 In terminal A run:
 ```
 ros2 run face_detection detection_publisher
@@ -73,7 +73,7 @@ ros2 run image_tools showimage -s 1
 ```
 for command line arguments list run with -h flag.
 
-If you want to run the face detection algorithm on the subscriber side:
+If you want to run the face detection algorithm on the subscriber side:<br />
 In terminal A run:
 ```
 ros2 run face_detection detection_subscriber -s 1
