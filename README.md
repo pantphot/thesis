@@ -1,4 +1,4 @@
-## Contents
+# Contents
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) with modified cam2image.cpp file , to include timestamp in published image.
 2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package.
 3. nettools:
@@ -7,27 +7,27 @@
     * variable_length_pub.cpp:  Publishes variable length messages with given increase step and frequency.
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
-4. detection:
+4. face_detection:
     * detection_publisher.cpp: Performs face detection on images taken from video stream and publishes them on a given topic.
     * detection_subscriber.cpp: Subscribes on a given topic of type Image and performs face detection on the received images.
 
-## Prerequisites
+# Prerequisites
 1. ROS2 bouncy or crystal
 2. python3
 3. matplotlib
 
-## Build instructions
+# Build instructions
 Clone in a new workspace e.g ros2_overlay_ws/src.
 
 ```
 cd ros2_overlay_ws
 colcon build --symlink-install
 ```
-## Execute instructions
+# Execute instructions
 Make sure you have installed ros2 bouncy and setup the environment correctly.
 Source the ros2_overlay_ws/install/local_setup.bash file.
 
-# Nettools package
+## nettools package
 
 In terminal A run the image publisher:
 ```
@@ -61,11 +61,11 @@ To view a real-time plot for a given statistic run the nettools_plotter.py scrip
 ```
 ros2 run nettools nettools_plotter.py latency
 ```
-# Detection package
+## face_detection package
 If you want to run the face detection algorithm on the publisher side:
 In terminal A run:
 ```
-ros2 run detection detection_publisher
+ros2 run face_detection detection_publisher
 ```
 In terminal B run:
 ```
@@ -76,7 +76,7 @@ for command line arguments list run with -h flag.
 If you want to run the face detection algorithm on the subscriber side:
 In terminal A run:
 ```
-ros2 run detection detection_subscriber -s 1
+ros2 run face_detection detection_subscriber -s 1
 ```
 In terminal B run:
 ```
