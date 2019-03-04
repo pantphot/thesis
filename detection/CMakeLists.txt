@@ -25,6 +25,7 @@ include_directories(include)
 
 add_executable(detection
   src/detection.cpp
+  src/options.cpp
   )
 
 ament_target_dependencies(detection

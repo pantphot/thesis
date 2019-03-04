@@ -7,7 +7,7 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
 #include "sensor_msgs/msg/image.hpp"
-
+#include "options.hpp"
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -95,9 +95,8 @@ int main(int argc, char * argv[])
   double freq = 30.0;
   rmw_qos_reliability_policy_t reliability_policy = RMW_QOS_POLICY_RELIABILITY_RELIABLE;
   rmw_qos_history_policy_t history_policy = RMW_QOS_POLICY_HISTORY_KEEP_ALL;
-  size_t width = 320;
-  size_t height = 240;
-  bool burger_mode = true;
+  size_t width = 480;
+  size_t height = 640;
   std::string topic("image");
 
   // Load the cascades
@@ -112,12 +111,12 @@ int main(int argc, char * argv[])
   setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
   // Configure demo parameters with command line options.
-  // bool success = parse_command_options(
-  //   argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, &freq, &width, &height,
-  //   &burger_mode, &topic);
-  // if (!success) {
-  //   return 0;
-  // }
+  bool success = parse_command_options(
+    argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, &freq, &width, &height,
+    &topic);
+  if (!success) {
+    return 0;
+  }
     // CommandLineParser parser(argc, argv,
     //                          "{help h||}"
     //                          // "{face_cascade|../include/data/haarcascades/haarcascade_frontalface_alt.xml|Path to face cascade.}"
@@ -216,23 +215,10 @@ int main(int argc, char * argv[])
       }
       // Do some work in rclcpp and wait for more to come in.
       rclcpp::spin_some(node);
-      loop_rate.sleep();
+      // loop_rate.sleep();
     }
 
     rclcpp::shutdown();
 
-    // while ( capture.read(frame) )
-    // {
-    //     if( frame.empty() )
-    //     {
-    //         cout << "--(!) No captured frame -- Break!\n";
-    //         break;
-    //     }
-    //
-    //     if( waitKey(10) == 27 )
-    //     {
-    //         break; // escape
-    //     }
-    // }
     return 0;
 }
