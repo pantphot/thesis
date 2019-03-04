@@ -1,9 +1,9 @@
 /*
-*   detection.cpp
+*   detection_publisher.cpp
 *   Author: Pantelis Photiou
 *   Created: Mar 2019
 *   Initializes a ROS 2 node which performs face detection and
-*   publishes an image message on given topic
+*   publishes an image message with detected face on given topic
 */
 
 #include <cstdio>

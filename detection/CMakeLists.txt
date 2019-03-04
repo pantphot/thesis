@@ -23,26 +23,34 @@ include_directories(include)
 
 #ament_python_install_package(scripts/)
 
-add_executable(detection
-  src/detection.cpp
+add_executable(detection_publisher
+  src/detection_publisher.cpp
   src/options.cpp
   )
 
-ament_target_dependencies(detection
+ament_target_dependencies(detection_publisher
   "rclcpp"
   "sensor_msgs"
   "std_msgs"
   "OpenCV"
-#"rmw"
 )
-install(TARGETS
-  detection
-  DESTINATION lib/${PROJECT_NAME})
 
-#install(PROGRAMS
-#  scripts/nettools_plotter.py
-#  scripts/variable_length_pub.py
-#  DESTINATION lib/${PROJECT_NAME})
+add_executable(detection_subscriber
+  src/detection_subscriber.cpp
+  src/options.cpp
+  )
+
+ament_target_dependencies(detection_subscriber
+  "rclcpp"
+  "sensor_msgs"
+  "std_msgs"
+  "OpenCV"
+)
+
+install(TARGETS
+  detection_publisher
+  detection_subscriber
+  DESTINATION lib/${PROJECT_NAME})
 
 
 ament_package()

@@ -3,7 +3,7 @@
 <package format="3">
   <name>detection</name>
   <version>0.0.0</version>
-  <description>object detection</description>
+  <description>face detection</description>
   <maintainer email="pantphotiou@gmail.com">Pantelis Photiou</maintainer>
   <license>Apache License 2.0</license>
 
@@ -36,7 +36,7 @@
   <exec_depend>rosidl_default_runtime</exec_depend>-->
   <exec_depend>libopencv-dev</exec_depend>
 
-  <member_of_group>rosidl_interface_packages</member_of_group>
+  <!--<member_of_group>rosidl_interface_packages</member_of_group>-->
 
   <export>
     <build_type>ament_cmake</build_type>
