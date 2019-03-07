@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
   // Configure demo parameters with command line options.
   if (!parse_command_options(
       argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, nullptr, nullptr,
-      nullptr, &topic))
+      nullptr,nullptr, &topic))
   {
     return 0;
   }

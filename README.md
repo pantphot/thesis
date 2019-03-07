@@ -7,9 +7,8 @@
     * variable_length_pub.cpp:  Publishes variable length messages with given increase step and frequency.
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
-4. face_detection:
-    * detection_publisher.cpp: Performs face detection on images taken from video stream and publishes them on a given topic.
-    * detection_subscriber.cpp: Subscribes on a given topic of type Image and performs face detection on the received images.
+4. detection:
+    * detection.cpp: Initializes a ROS 2 node which subscribes to an image topic and performs face or body detection on received image. The node then publishes the region of interest on topic region_of_interest.
 
 # Prerequisites
 1. ROS2 bouncy or crystal
@@ -61,22 +60,10 @@ To view a real-time plot for a given statistic run the nettools_plotter.py scrip
 ```
 ros2 run nettools nettools_plotter.py latency
 ```
-## face_detection package
-If you want to run the face detection algorithm on the publisher side:<br />
+## detection package
 In terminal A run:
 ```
-ros2 run face_detection detection_publisher
-```
-In terminal B run:
-```
-ros2 run image_tools showimage -s 1
-```
-for command line arguments list run with -h flag.
-
-If you want to run the face detection algorithm on the subscriber side:<br />
-In terminal A run:
-```
-ros2 run face_detection detection_subscriber -s 1
+ros2 run detection detection -s 1
 ```
 In terminal B run:
 ```
@@ -84,6 +71,11 @@ ros2 run image_tools cam2image
 ```
 for command line arguments list run with -h flag
 
+In terminal C run:
+```
+ros2 topic echo /region_of_interest
+```
+to view if something was detected and the region of interest offsets from the original image
 
 
 * To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py). <br />
