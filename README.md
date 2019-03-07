@@ -81,3 +81,4 @@ to view if something was detected and the region of interest offsets from the or
 * To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py). <br />
 * The nettools latency node subscribes to topics where there is a header included in the message published. To add more topic types add new else if in latency.cpp main() (line 155) and include the message definition in the includes section.  <br />
 * (nettools throughput) To add more topic types add new else if with new subscription creation in throughput.cpp, in throughput class initialization (line 41) and include the message definition in the includes section.  <br />
+* The detection package can detect more than one objects but publishes the region of interest only for one.

@@ -3,7 +3,7 @@
 <package format="3">
   <name>detection</name>
   <version>0.0.0</version>
-  <description>A ROS2 package that subscribes on an Image topic and performs face or body detection on images using OpenCV objdetect library </description>
+  <description>A ROS2 package that initializes a node that subscribes to an Image topic and performs face or body detection on images using OpenCV objdetect library and publishes the region of interest</description>
   <maintainer email="pantphotiou@gmail.com">Pantelis Photiou</maintainer>
   <license>Apache License 2.0</license>
 
