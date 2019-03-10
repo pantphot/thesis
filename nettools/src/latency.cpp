@@ -95,7 +95,7 @@ void CalculateStatistics<T>::sample(const rclcpp::Time time_received, const rclc
     }
   }
 
-  // Compute receiving frequencyuency
+  // Compute receiving frequency
   if (n_msgs_received < 2){
     msg_out.frequency.val = 0.0;
     latest_sample = time_received;

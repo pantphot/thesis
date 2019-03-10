@@ -177,6 +177,7 @@ int main(int argc, char * argv[])
   custom_qos_profile.reliability = reliability_policy;
   custom_qos_profile.history = history_policy;
 
+  std::cout << custom_qos_profile.reliability << '\n';
   // Create node and spin
   rclcpp::spin(std::make_shared<Detector>(topic, custom_qos_profile, show_camera, body));
 
