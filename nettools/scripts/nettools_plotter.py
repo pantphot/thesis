@@ -46,7 +46,7 @@ class NettoolsPlotter(Node):
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
             plt.ylabel('Frequency (Hz)')
-            plt.ylim(0.0,400.0)
+            plt.ylim(0.0,40.0)
         else:
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')

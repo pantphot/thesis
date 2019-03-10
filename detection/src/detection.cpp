@@ -16,7 +16,7 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
 #include "sensor_msgs/msg/image.hpp"
-#include "sensor_msgs/msg/region_of_interest.hpp"
+// #include "sensor_msgs/msg/region_of_interest.hpp"
 #include "options.hpp"
 #include "detection.hpp"
 
@@ -30,7 +30,8 @@ Detector::Detector (const std::string topic,rmw_qos_profile_t custom_qos_profile
 topic(topic),
 custom_qos_profile(custom_qos_profile),
 show_camera(show_camera),
-body(body)
+body(body),
+i(0)
 {
 
   // Load the cascades
@@ -52,13 +53,16 @@ body(body)
   }
 
   // Initialize publisher that publishes the ROI
-  pub = this->create_publisher<sensor_msgs::msg::RegionOfInterest>(
+  pub = this->create_publisher<nettools_msgs::msg::RoiWithHeader>(
     "region_of_interest", rmw_qos_profile_default);
 
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '" << topic << "'" << std::endl;
   sub = this->create_subscription<sensor_msgs::msg::Image>(
         topic.c_str(), std::bind(&Detector::callback, this,  std::placeholders::_1),custom_qos_profile);
+
+  // Initialize clock to timestamp the output messages
+  clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
 }
 
 Detector::~Detector(){}
@@ -94,7 +98,7 @@ int Detector::encoding2mat_type(const std::string & encoding)
 void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, rclcpp::Logger logger)
 {
   RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
-
+  i++;
   // Convert to an OpenCV matrix by assigning the data.
   Mat frame(msg->height, msg->width, encoding2mat_type(msg->encoding), const_cast<unsigned char *>(msg->data.data()), msg->step);
   Mat frame_gray;
@@ -105,27 +109,25 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   cascade.detectMultiScale( frame_gray, det );
 
   // cout << "/* Number of objects detected  */" << det.size()<<'\n';
-
-
   // If detected
   if (!det.empty()){
     for ( size_t i = 0; i < det.size(); i++ )
     {
       rectangle( frame, Point((det[i].x), det[i].y),Point((det[i].x + det[i].width-1), (det[i].y + det[i].height-1)),
          Scalar(255, 0, 0), 3, 8, 0);
-      msg_out.height = det[0].height;
-      msg_out.width = det[0].width;
-      msg_out.x_offset = det[0].x;
-      msg_out.y_offset = det[0].y;
-      msg_out.do_rectify = true;
+      msg_out.roi.height = det[0].height;
+      msg_out.roi.width = det[0].width;
+      msg_out.roi.x_offset = det[0].x;
+      msg_out.roi.y_offset = det[0].y;
+      msg_out.roi.do_rectify = true;
     }
   }
   else{
-    msg_out.height = 0;
-    msg_out.width = 0;
-    msg_out.x_offset = 0;
-    msg_out.y_offset = 0;
-    msg_out.do_rectify = false;
+    msg_out.roi.height = 0;
+    msg_out.roi.width = 0;
+    msg_out.roi.x_offset = 0;
+    msg_out.roi.y_offset = 0;
+    msg_out.roi.do_rectify = false;
   }
 
   if (show_camera) {
@@ -141,6 +143,9 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     // Draw the screen and wait for 1 millisecond.
     waitKey(1);
   }
+  // rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+  msg_out.header.frame_id = std::to_string(i);
+  msg_out.header.stamp = clock->now();
   pub->publish(msg_out);
 }
 

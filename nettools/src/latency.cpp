@@ -19,6 +19,7 @@
 #include "nettools/options.hpp"
 #include "nettools/latency.hpp"
 #include "nettools_msgs/msg/byte_array.hpp"
+#include "nettools_msgs/msg/roi_with_header.hpp"
 
 template<typename T>
 CalculateStatistics<T>::CalculateStatistics(const std::string topic,rmw_qos_profile_t custom_qos_profile)
@@ -158,6 +159,11 @@ int main(int argc, char * argv[])
   else if (msg_type == "bytearray")
   {
     typedef nettools_msgs::msg::ByteArray MsgType;
+    rclcpp::spin(std::make_shared<CalculateStatistics<MsgType>>(topic, custom_qos_profile));
+  }
+  else if (msg_type == "roi")
+  {
+    typedef nettools_msgs::msg::RoiWithHeader MsgType;
     rclcpp::spin(std::make_shared<CalculateStatistics<MsgType>>(topic, custom_qos_profile));
   }
   else{

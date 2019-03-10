@@ -18,6 +18,7 @@
 #include <cstdio>
 #include "nettools/throughput.hpp"
 #include "nettools_msgs/msg/byte_array.hpp"
+#include "nettools_msgs/msg/roi_with_header.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
 using namespace std::chrono_literals;
@@ -37,13 +38,18 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
 
   // Create Subscription to topic
   if (msg_type == "image"){
-  std::cout << "Creating image subscriber" << std::endl;
+  std::cout << "Creating Image subscriber" << std::endl;
   sub = this->create_subscription<sensor_msgs::msg::Image>(
         topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
   }
   else if (msg_type == "bytearray"){
-  std::cout << "Creating bytearray subscriber" << std::endl;
+  std::cout << "Creating Bytearray subscriber" << std::endl;
   sub = this->create_subscription<nettools_msgs::msg::ByteArray>(
+        topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
+  }
+  else if (msg_type == "roi"){
+  std::cout << "Creating ROI subscriber" << std::endl;
+  sub = this->create_subscription<nettools_msgs::msg::RoiWithHeader>(
         topic.c_str(), std::bind(&Throughput::callback, this,  std::placeholders::_1),custom_qos_profile);
   }
   else

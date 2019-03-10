@@ -16,6 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(nettools_msgs REQUIRED)
 
 #find_package(ament_cmake_python REQUIRED)
 #find_package(python_cmake_module REQUIRED)
@@ -34,6 +35,7 @@ ament_target_dependencies(detection
   "sensor_msgs"
   "std_msgs"
   "OpenCV"
+  "nettools_msgs"
 )
 
 install(TARGETS

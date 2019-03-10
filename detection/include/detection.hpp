@@ -2,10 +2,13 @@
 #define __DETECTION_DETECTION_HPP
   #include "rclcpp/rclcpp.hpp"
   #include "sensor_msgs/msg/image.hpp"
-  #include "sensor_msgs/msg/region_of_interest.hpp"
+  #include "nettools_msgs/msg/roi_with_header.hpp"
   #include "opencv2/objdetect/objdetect.hpp"
   #include "opencv2/highgui/highgui.hpp"
   #include "opencv2/imgproc/imgproc.hpp"
+  #include "rclcpp/clock.hpp"
+  #include "rclcpp/time.hpp"
+  #include "rclcpp/time_source.hpp"
 
   class Detector : public rclcpp::Node {
     public:
@@ -16,13 +19,15 @@
       ~Detector();
 
       rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub;
-      rclcpp::Publisher<sensor_msgs::msg::RegionOfInterest>::SharedPtr pub;
+      rclcpp::Publisher<nettools_msgs::msg::RoiWithHeader>::SharedPtr pub;
+      rclcpp::Clock::SharedPtr clock ;
       std::string topic;
       rmw_qos_profile_t custom_qos_profile;
-      sensor_msgs::msg::RegionOfInterest msg_out;
+      nettools_msgs::msg::RoiWithHeader msg_out;
       bool show_camera;
       cv::CascadeClassifier cascade;
       bool body;
+      size_t i;
   };
 
 #endif
