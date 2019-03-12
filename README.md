@@ -2,8 +2,8 @@
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) with modified cam2image.cpp file , to include timestamp in published image.
 2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package.
 3. nettools:
-    * latency.cpp: Subscribes to given topic and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics topic.
-    * throughput.cpp: Subscribes to given topic and calculates network throughput , which then is published on the topic_statistics topic.
+    * latency.cpp: Subscribes to given TOPIC and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics_TOPIC topic.
+    * throughput.cpp: Subscribes to given TOPIC and calculates network throughput , which then is published on the topic_statistics_TOPIC topic.
     * variable_length_pub.cpp:  Publishes variable length messages with given increase step and frequency.
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
@@ -53,7 +53,7 @@ for command line arguments list run with -h flag
 
 To view the calculated statistics run:
 ```
-ros2 topic echo /topic_statistics
+ros2 topic echo /topic_statistics_TOPIC
 ```
 
 To view a real-time plot for a given statistic run the nettools_plotter.py script followed by the statistic you want to plot e.g.:

@@ -35,7 +35,7 @@ frequency_avg_last(0),
 latest_sample()
 {
   // Initialize publisher that publishes network statistics
-  pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics",rmw_qos_profile_default);
+  pub = this->create_publisher<nettools_msgs::msg::TopicStatistics>("topic_statistics_"+ topic,rmw_qos_profile_default);
 
   // Initialize a subscriber that will receive the ROS message to be used in calculating statistics.
   std::cerr << "Subscribing to topic '" << topic << "'" << std::endl;
