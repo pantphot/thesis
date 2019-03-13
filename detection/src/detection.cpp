@@ -23,6 +23,10 @@
 using namespace std;
 using namespace cv;
 
+
+double min_face_size=20;
+double max_face_size=200;
+
 // CascadeClassifier cascade;
 
 Detector::Detector (const std::string topic,rmw_qos_profile_t custom_qos_profile, bool show_camera, bool body)
@@ -106,7 +110,9 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   equalizeHist( frame_gray, frame_gray );
   //-- Detect bodies or faces
   vector<Rect> det;
-  cascade.detectMultiScale( frame_gray, det );
+  cascade.detectMultiScale( frame_gray, det,1.2,2,0|CV_HAAR_SCALE_IMAGE,
+     Size(min_face_size, min_face_size),Size(max_face_size, max_face_size ));
+  // cascade.detectMultiScale( frame_gray, det);
 
   // cout << "/* Number of objects detected  */" << det.size()<<'\n';
   // If detected

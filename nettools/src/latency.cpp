@@ -59,7 +59,7 @@ void CalculateStatistics<T>::receive_msg(const std::shared_ptr<T> msg,rclcpp::Lo
 {
   auto time_received = clock->now();
   received_msg_id = std::stoi (msg->header.frame_id,nullptr,10);
-  // RCLCPP_INFO(logger, "Received message #%d", received_msg_id);
+  RCLCPP_INFO(logger, "Received message #%d", received_msg_id);
   auto time_sent = rclcpp::Time( msg->header.stamp.sec, msg->header.stamp.nanosec,RCL_SYSTEM_TIME);
   sample(time_received,time_sent,received_msg_id,logger);
 }
