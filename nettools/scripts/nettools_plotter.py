@@ -36,7 +36,7 @@ class NettoolsPlotter(Node):
             self.sub = self.create_subscription(Float64, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Time (s)')
             plt.ylabel('Throughput (Mb)')
-            plt.ylim(0.0,50.0)
+            plt.ylim(0.0,10.0)
         elif self.stat == 'latency':
             self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')

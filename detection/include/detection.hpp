@@ -28,8 +28,13 @@
       cv::CascadeClassifier cascade;
       bool body;
       size_t i;
+<<<<<<< HEAD
       int current_msg;
       int msg_loss;
+=======
+      double min_face_size;
+      double max_face_size;
+>>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
   };
 
 #endif

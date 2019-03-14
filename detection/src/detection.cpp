@@ -16,14 +16,12 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
 #include "sensor_msgs/msg/image.hpp"
-// #include "sensor_msgs/msg/region_of_interest.hpp"
 #include "options.hpp"
 #include "detection.hpp"
 
 using namespace std;
 using namespace cv;
 
-// CascadeClassifier cascade;
 
 Detector::Detector (const std::string topic,rmw_qos_profile_t custom_qos_profile, bool show_camera, bool body)
 : Node ("detector"),
@@ -32,8 +30,13 @@ custom_qos_profile(custom_qos_profile),
 show_camera(show_camera),
 body(body),
 i(0),
+<<<<<<< HEAD
 current_msg(),
 msg_loss(0)
+=======
+min_face_size(20),
+max_face_size(200)
+>>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
 {
 
   // Load the cascades
@@ -69,6 +72,7 @@ msg_loss(0)
 
 Detector::~Detector(){}
 
+// Callback receiving Image messages
 void Detector::callback(const std::shared_ptr<sensor_msgs::msg::Image> msg)
 {
   detectAndDisplay(msg, this->get_logger());
@@ -108,9 +112,9 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   equalizeHist( frame_gray, frame_gray );
   //-- Detect bodies or faces
   vector<Rect> det;
-  cascade.detectMultiScale( frame_gray, det );
+  cascade.detectMultiScale( frame_gray, det,1.2,2,CV_HAAR_SCALE_IMAGE,
+     Size(min_face_size, min_face_size),Size(max_face_size, max_face_size ));
 
-  // cout << "/* Number of objects detected  */" << det.size()<<'\n';
   // If detected
   if (!det.empty()){
     for ( size_t i = 0; i < det.size(); i++ )
@@ -131,6 +135,7 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     msg_out.roi.y_offset = 0;
     msg_out.roi.do_rectify = false;
   }
+<<<<<<< HEAD
   // Calculate message loss
   if (i == 1){
     current_msg = std::stoi (msg->header.frame_id,nullptr,10);
@@ -141,6 +146,9 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   }
   RCLCPP_INFO(logger, "Message loss %d", msg_loss);
 
+=======
+  
+>>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
   if (show_camera) {
     CvMat cvframe;
     if (msg->encoding == "rgb8") {

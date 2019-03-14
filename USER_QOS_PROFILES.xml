@@ -1,0 +1,15 @@
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.3.1/rti_dds_qos_profiles.xsd" version="5.3.1">
+    <!-- Qos Library -->
+    <qos_library name="UserQosProfilesLibrary">
+      <qos_profile name="rmw_qos_profile_system_default">
+        <participant_factory_qos>
+           <logging>
+              <output_file>/tmp/dds_log.txt</output_file>
+              <verbosity>ALL</verbosity>
+              <print_format>TIMESTAMPED</print_format>
+           </logging>
+        </participant_factory_qos>
+      </qos_profile>
+    </qos_library>
+</dds>
