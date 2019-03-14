@@ -86,25 +86,13 @@ void CalculateStatistics<T>::sample(const rclcpp::Time time_received, const rclc
     msg_out.jitter +=  (double(d) - msg_out.jitter)/16;// 16 noise reduction ratio
   }
   // Calculate message loss
-<<<<<<< HEAD
-  if (n_msgs_received == 1){
-    current_msg = received_msg_id;
-=======
-
   if (n_msgs_received == 1){
     current_msg = received_msg_id;
   }
   else{
     msg_out.msg_loss += received_msg_id - current_msg - 1;
     current_msg = received_msg_id;
->>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
   }
-  else{
-    msg_out.msg_loss += received_msg_id - current_msg - 1;
-    current_msg = received_msg_id;
-  }
-
-
 
   // Compute receiving frequency
   if (n_msgs_received < 2){

@@ -30,13 +30,10 @@ custom_qos_profile(custom_qos_profile),
 show_camera(show_camera),
 body(body),
 i(0),
-<<<<<<< HEAD
 current_msg(),
 msg_loss(0)
-=======
 min_face_size(20),
 max_face_size(200)
->>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
 {
 
   // Load the cascades
