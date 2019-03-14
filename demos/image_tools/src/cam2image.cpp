@@ -89,6 +89,7 @@ int main(int argc, char * argv[])
   bool burger_mode = false;
   std::string topic("image");
   double pub_freq;
+  double freq_avg;
   rclcpp::Time previous_stamp;
   rclcpp::Time time_sent;
 
@@ -224,11 +225,15 @@ int main(int argc, char * argv[])
         pub_freq = 0.0;
         previous_stamp = time_sent;
       }
+      else if (i == 2){
+        pub_freq = (1.0/ RCL_NS_TO_S(double((time_sent.nanoseconds() - previous_stamp.nanoseconds()))));
+        freq_avg = pub_freq;
+      }
       else{
         pub_freq = (1.0/ RCL_NS_TO_S(double((time_sent.nanoseconds() - previous_stamp.nanoseconds()))));
         previous_stamp = time_sent;
-        RCLCPP_INFO(node_logger, "Publishing frequency =  %lf", pub_freq);
-
+        freq_avg += (pub_freq - freq_avg)/double(i - 1);
+        RCLCPP_INFO(node_logger, "Average publishing frequency  =  %lf", freq_avg);
       }
       ++i;
     }
