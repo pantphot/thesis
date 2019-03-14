@@ -31,7 +31,7 @@ show_camera(show_camera),
 body(body),
 i(0),
 current_msg(),
-msg_loss(0)
+msg_loss(0),
 min_face_size(20),
 max_face_size(200)
 {
