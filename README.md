@@ -1,5 +1,5 @@
 # Contents
-1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) with modified cam2image.cpp file , to include timestamp in published image.
+1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) with modified cam2image.cpp file , to include timestamp in published image and to calculate average publishing frequency.
 2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package.
 3. nettools:
     * latency.cpp: Subscribes to given TOPIC and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics_TOPIC topic.
@@ -8,7 +8,7 @@
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
 4. detection:
-    * detection.cpp: Initializes a ROS 2 node which subscribes to an image topic and performs face or body detection on received image. The node then publishes the region of interest on topic region_of_interest.
+    * detection.cpp: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the region of interest on topic region_of_interest.
 
 # Prerequisites
 1. ROS2 bouncy or crystal
@@ -76,10 +76,10 @@ In terminal C run:
 ```
 ros2 topic echo /region_of_interest
 ```
-to view if something was detected and the region of interest offsets from the original image
+to view if something was detected and the region of interest offsets from the original image.
 
 
-* To be able to run the nettools_plotter.py with ros2 run you have to make it executable before building the package (chmod +x nettools_plotter.py). <br />
-* The nettools latency node subscribes to topics where there is a header included in the message published. To add more topic types add new else if in latency.cpp main() (line 155) and include the message definition in the includes section.  <br />
+* To be able to 'ros2 run' the nettools_plotter.py you have to make it executable before building the package (chmod +x nettools_plotter.py). <br />
+* The nettools latency node subscribes to topics where there is a std_msgs/header included in the message published. To add more topic types add new else if in latency.cpp main() (line 155) and include the message definition in the includes section.  <br />
 * (nettools throughput) To add more topic types add new else if with new subscription creation in throughput.cpp, in throughput class initialization (line 41) and include the message definition in the includes section.  <br />
 * The detection package can detect more than one objects but publishes the region of interest only for one.<br />
