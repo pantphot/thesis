@@ -61,7 +61,10 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
       1s,
       [this]()
       {
-        throughput.data = double(buffer)/131072;
+        // throughput.data = double(buffer)/131072;
+        // std::cout << buffer << '\n';
+        //bytes to mb
+        throughput.data = double(buffer)/1048576;
         //throughput.avg += (throughput.val - throughput.avg)/ this->count;
         pub->publish(throughput);
         // count +=1;
@@ -75,6 +78,7 @@ Throughput::~Throughput(){}
 void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
 {
   buffer = buffer + msg->buffer_length;
+  // std::cout << msg->buffer_length << '\n';
 }
 
 int main(int argc, char * argv[])

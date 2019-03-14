@@ -16,7 +16,6 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp/time_source.hpp"
 #include "sensor_msgs/msg/image.hpp"
-// #include "sensor_msgs/msg/region_of_interest.hpp"
 #include "options.hpp"
 #include "detection.hpp"
 
@@ -24,18 +23,15 @@ using namespace std;
 using namespace cv;
 
 
-double min_face_size=20;
-double max_face_size=200;
-
-// CascadeClassifier cascade;
-
 Detector::Detector (const std::string topic,rmw_qos_profile_t custom_qos_profile, bool show_camera, bool body)
 : Node ("detector"),
 topic(topic),
 custom_qos_profile(custom_qos_profile),
 show_camera(show_camera),
 body(body),
-i(0)
+i(0),
+min_face_size(20),
+max_face_size(200)
 {
 
   // Load the cascades
@@ -71,6 +67,7 @@ i(0)
 
 Detector::~Detector(){}
 
+// Callback receiving Image messages
 void Detector::callback(const std::shared_ptr<sensor_msgs::msg::Image> msg)
 {
   detectAndDisplay(msg, this->get_logger());
@@ -110,11 +107,9 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   equalizeHist( frame_gray, frame_gray );
   //-- Detect bodies or faces
   vector<Rect> det;
-  cascade.detectMultiScale( frame_gray, det,1.2,2,0|CV_HAAR_SCALE_IMAGE,
+  cascade.detectMultiScale( frame_gray, det,1.2,2,CV_HAAR_SCALE_IMAGE,
      Size(min_face_size, min_face_size),Size(max_face_size, max_face_size ));
-  // cascade.detectMultiScale( frame_gray, det);
 
-  // cout << "/* Number of objects detected  */" << det.size()<<'\n';
   // If detected
   if (!det.empty()){
     for ( size_t i = 0; i < det.size(); i++ )
@@ -135,7 +130,7 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     msg_out.roi.y_offset = 0;
     msg_out.roi.do_rectify = false;
   }
-
+  
   if (show_camera) {
     CvMat cvframe;
     if (msg->encoding == "rgb8") {

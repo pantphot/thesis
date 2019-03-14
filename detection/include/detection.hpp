@@ -28,6 +28,8 @@
       cv::CascadeClassifier cascade;
       bool body;
       size_t i;
+      double min_face_size;
+      double max_face_size;
   };
 
 #endif
