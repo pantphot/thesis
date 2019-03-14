@@ -88,6 +88,9 @@ int main(int argc, char * argv[])
   size_t height = 240;
   bool burger_mode = false;
   std::string topic("image");
+  double pub_freq;
+  rclcpp::Time previous_stamp;
+  rclcpp::Time time_sent;
 
   // Force flush of the stdout buffer.
   // This ensures a correct sync of all prints
@@ -205,16 +208,28 @@ int main(int argc, char * argv[])
         cv::waitKey(1);
       }
       // Publish the image message and increment the frame_id.
-      RCLCPP_INFO(node_logger, "Publishing image #%zd", i);
+      // RCLCPP_INFO(node_logger, "Publishing image #%zd", i);
 
       //rclcpp::TimeSource ts(node);
       rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
       //rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
       //ts.attachClock(clock);
       msg->header.stamp = clock->now();
-
-
       pub->publish(msg);
+
+      //Calculate publishing frequency
+
+      time_sent = rclcpp::Time( msg->header.stamp.sec, msg->header.stamp.nanosec,RCL_SYSTEM_TIME);
+      if (i<2){
+        pub_freq = 0.0;
+        previous_stamp = time_sent;
+      }
+      else{
+        pub_freq = (1.0/ RCL_NS_TO_S(double((time_sent.nanoseconds() - previous_stamp.nanoseconds()))));
+        previous_stamp = time_sent;
+        RCLCPP_INFO(node_logger, "Publishing frequency =  %lf", pub_freq);
+
+      }
       ++i;
     }
     // Do some work in rclcpp and wait for more to come in.
