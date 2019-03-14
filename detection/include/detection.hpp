@@ -28,6 +28,8 @@
       cv::CascadeClassifier cascade;
       bool body;
       size_t i;
+      int current_msg;
+      int msg_loss;
   };
 
 #endif

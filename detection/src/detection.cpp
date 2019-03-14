@@ -31,7 +31,9 @@ topic(topic),
 custom_qos_profile(custom_qos_profile),
 show_camera(show_camera),
 body(body),
-i(0)
+i(0),
+current_msg(),
+msg_loss(0)
 {
 
   // Load the cascades
@@ -97,7 +99,7 @@ int Detector::encoding2mat_type(const std::string & encoding)
 // Receive Image message, apply body or face detection and publish the ROI
 void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, rclcpp::Logger logger)
 {
-  RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
+  // RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
   i++;
   // Convert to an OpenCV matrix by assigning the data.
   Mat frame(msg->height, msg->width, encoding2mat_type(msg->encoding), const_cast<unsigned char *>(msg->data.data()), msg->step);
@@ -129,6 +131,15 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     msg_out.roi.y_offset = 0;
     msg_out.roi.do_rectify = false;
   }
+  // Calculate message loss
+  if (i == 1){
+    current_msg = std::stoi (msg->header.frame_id,nullptr,10);
+  }
+  else{
+    msg_loss += std::stoi (msg->header.frame_id,nullptr,10) - current_msg - 1;
+    current_msg = std::stoi (msg->header.frame_id,nullptr,10);
+  }
+  RCLCPP_INFO(logger, "Message loss %d", msg_loss);
 
   if (show_camera) {
     CvMat cvframe;
