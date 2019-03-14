@@ -135,7 +135,7 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     msg_out.roi.y_offset = 0;
     msg_out.roi.do_rectify = false;
   }
-<<<<<<< HEAD
+
   // Calculate message loss
   if (i == 1){
     current_msg = std::stoi (msg->header.frame_id,nullptr,10);
@@ -146,9 +146,7 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
   }
   RCLCPP_INFO(logger, "Message loss %d", msg_loss);
 
-=======
-  
->>>>>>> 7bc1a9a4a811e457d5ce1356fb3fe5995c8fc025
+
   if (show_camera) {
     CvMat cvframe;
     if (msg->encoding == "rgb8") {
