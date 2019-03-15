@@ -200,21 +200,17 @@ int main(int argc, char * argv[])
         convert_frame_to_message(flipped_frame, i, msg);
       }
       if (show_camera) {
-        // NOTE(esteve): Use C version of cvShowImage to avoid this on Windows:
-        // http://stackoverflow.com/questions/20854682/opencv-multiple-unwanted-window-with-garbage-name
-        CvMat cvframe = frame;
+                CvMat cvframe = frame;
         // Show the image in a window called "cam2image".
         cvShowImage("cam2image", &cvframe);
         // Draw the image to the screen and wait 1 millisecond.
         cv::waitKey(1);
       }
       // Publish the image message and increment the frame_id.
-      // RCLCPP_INFO(node_logger, "Publishing image #%zd", i);
-
-      //rclcpp::TimeSource ts(node);
+      RCLCPP_INFO(node_logger, "Publishing image #%zd", i);
       rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
-      //rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
-      //ts.attachClock(clock);
+
+      // Timestamp the message
       msg->header.stamp = clock->now();
       pub->publish(msg);
 

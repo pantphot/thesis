@@ -1,6 +1,6 @@
 # Contents
-1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) with modified cam2image.cpp file , to include timestamp in published image and to calculate average publishing frequency.
-2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package.
+1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
+2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
 3. nettools:
     * latency.cpp: Subscribes to given TOPIC and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics_TOPIC topic.
     * throughput.cpp: Subscribes to given TOPIC and calculates network throughput , which then is published on the topic_statistics_TOPIC topic.
@@ -8,7 +8,7 @@
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
 4. detection:
-    * detection.cpp: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the region of interest on topic region_of_interest.
+    * detection.cpp: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the nettools_msgs/RoiWithHeader.msg on topic region_of_interest.
 
 # Prerequisites
 1. ROS2 bouncy or crystal
