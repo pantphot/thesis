@@ -9,7 +9,7 @@
     void callback(const std::shared_ptr<rmw_serialized_message_t> msg);
     ~Throughput();
 
-    // size_t count;
+    int count;
     std::string msg_type;
     std::string topic;
     rmw_qos_profile_t custom_qos_profile;
@@ -19,6 +19,8 @@
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pub;
     std_msgs::msg::Float64 throughput;
     double bufferMb;
+    double throughput_avg;
+    bool subscribed;
   };
 
 

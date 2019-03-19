@@ -4,7 +4,7 @@
 #   Author: Pantelis Photiou
 #   Created: Jan 2019
 #   This script implements a ROS2 node which subscribes on topic
-#   topic_statistics and plots latency, throughput, receiving frequency,
+#   topic_statistics_TOPIC and plots latency, throughput, receiving frequency,
 #   jitter and message loss statistics calculated by latency.cpp and throughput.cpp
 #
 import argparse
@@ -19,9 +19,10 @@ from nettools_msgs.msg import TopicStatistics
 from nettools_msgs.msg import StatisticsMeasurements
 
 class NettoolsPlotter(Node):
-    def __init__(self,stat):
+    def __init__(self,stat,topic):
         super().__init__('nettools_plotter')
         self.stat = stat
+        self.topic = 'topic_statistics_' + topic
         self.x_data = []
         self.y_data = []
         self.y_data_val = []
@@ -33,25 +34,25 @@ class NettoolsPlotter(Node):
         self.fig = plt.figure()
         plt.title(self.stat)
         if self.stat == 'throughput':
-            self.sub = self.create_subscription(Float64, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
+            self.sub = self.create_subscription(Float64, self.topic  , self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Time (s)')
             plt.ylabel('Throughput (Mb)')
-            plt.ylim(0.0,10.0)
+            # plt.ylim(0.0,10.0)
         elif self.stat == 'latency':
-            self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
+            self.sub = self.create_subscription(TopicStatistics, self.topic , self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
             plt.ylabel('Latency (ms)')
-            plt.ylim(0.0,500.0)
+            # plt.ylim(0.0,500.0)
         elif self.stat == 'frequency':
-            self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
+            self.sub = self.create_subscription(TopicStatistics,self.topic, self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
             plt.ylabel('Frequency (Hz)')
-            plt.ylim(0.0,40.0)
+            # plt.ylim(0.0,40.0)
         else:
-            self.sub = self.create_subscription(TopicStatistics, 'topic_statistics', self.plot_callback,qos_profile=qos_profile_default)
+            self.sub = self.create_subscription(TopicStatistics, self.topic, self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Messages Received')
             plt.ylabel(self.stat)
-            plt.ylim(0.0,200.0)
+            # plt.ylim(0.0,200.0)
         # plt.xlim(0,10000)
         print('sub created')
         plt.grid(True)
@@ -132,19 +133,23 @@ class NettoolsPlotter(Node):
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        'stat', choices=['msg_loss' , 'jitter' , 'latency' , 'frequency', 'throughput'], action='store',
+        '-s',dest='stat', choices=['msg_loss' , 'jitter' , 'latency' , 'frequency', 'throughput'], action='store',
         help='set the network statistic to be plotted')
+    parser.add_argument(
+        '-t',dest='topic',action='store',
+        help='set the topic where the statistics are calculated from')
     parser.set_defaults(stat='latency')
     parser.add_argument(
         'argv', nargs=argparse.REMAINDER,
         help='Pass arbitrary arguments to the executable')
     args = parser.parse_args(argv)
-
+    parser.print_help()
     rclpy.init(args=args.argv)
 
+    print (args.topic)
     print (args.stat)
 
-    node = NettoolsPlotter(args.stat)
+    node = NettoolsPlotter(args.stat,args.topic)
 
     try:
         rclpy.spin(node)

@@ -100,7 +100,7 @@ int Detector::encoding2mat_type(const std::string & encoding)
 // Receive Image message, apply body or face detection and publish the ROI
 void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, rclcpp::Logger logger)
 {
-  // RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
+  RCLCPP_INFO(logger, "Received image #%s", msg->header.frame_id.c_str());
   i++;
   // Convert to an OpenCV matrix by assigning the data.
   Mat frame(msg->height, msg->width, encoding2mat_type(msg->encoding), const_cast<unsigned char *>(msg->data.data()), msg->step);

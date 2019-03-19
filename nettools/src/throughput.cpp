@@ -25,12 +25,14 @@ using namespace std::chrono_literals;
 
 Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_qos_profile_t custom_qos_profile)
 : Node("throughput"),
-  // count(1),
+  count(1),
   msg_type(msg_type),
   topic(topic),
   custom_qos_profile(custom_qos_profile),
   buffer(0),
-  bufferMb(0)
+  bufferMb(0),
+  throughput_avg(0),
+  subscribed(false)
   {
 
   //Create publisher
@@ -62,12 +64,17 @@ Throughput::Throughput(const std::string msg_type, const std::string topic,rmw_q
       [this]()
       {
         // throughput.data = double(buffer)/131072;
-        // std::cout << buffer << '\n';
+        // std::cout << "Bytes "<<buffer << '\n';
+        // std::cout << "MB "<< double(buffer)/1048576<< '\n';
         //bytes to mb
         throughput.data = double(buffer)/1048576;
-        //throughput.avg += (throughput.val - throughput.avg)/ this->count;
+        // Begin calculating throughput average after subscribing to topic (Avoid summing zeros in the beginning)
+        if (subscribed == true){
+          throughput_avg += (throughput.data - throughput_avg)/ double(this->count);
+          std::cout << "Throughput average: " << throughput_avg << std::endl;
+        }
         pub->publish(throughput);
-        // count +=1;
+        count +=1;
         buffer = 0;
 
       });
@@ -77,6 +84,8 @@ Throughput::~Throughput(){}
 // Callback Function Receiving data
 void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
 {
+  subscribed = true;
+  // Byte size per message
   buffer = buffer + msg->buffer_length;
   // std::cout << msg->buffer_length << '\n';
 }
