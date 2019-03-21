@@ -65,6 +65,7 @@ max_face_size(200)
 
   // Initialize clock to timestamp the output messages
   clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+  std::cout << custom_qos_profile.depth << '\n';
 }
 
 Detector::~Detector(){}

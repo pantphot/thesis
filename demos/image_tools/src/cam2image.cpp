@@ -128,6 +128,9 @@ int main(int argc, char * argv[])
   // parameter.
   custom_camera_qos_profile.history = history_policy;
 
+  std::cout << custom_camera_qos_profile.depth << '\n';
+  std::cout << custom_camera_qos_profile.history << '\n';
+
   RCLCPP_INFO(node_logger, "Publishing data on topic '%s'", topic.c_str());
   // Create the image publisher with our custom QoS profile.
   auto pub = node->create_publisher<sensor_msgs::msg::Image>(
@@ -229,6 +232,7 @@ int main(int argc, char * argv[])
         pub_freq = (1.0/ RCL_NS_TO_S(double((time_sent.nanoseconds() - previous_stamp.nanoseconds()))));
         previous_stamp = time_sent;
         freq_avg += (pub_freq - freq_avg)/double(i - 1);
+        RCLCPP_INFO(node_logger, "Publishing frequency  =  %lf", pub_freq);
         RCLCPP_INFO(node_logger, "Average publishing frequency  =  %lf", freq_avg);
       }
       ++i;
