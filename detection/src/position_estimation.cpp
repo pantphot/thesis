@@ -74,21 +74,22 @@ z()
     if (image_width == 352)
     {
       focal_length = 427.5; // measured in pixels
-      hfov = 48.5 / 57.3; //radians
+      hfov = 48.5 ; //radians
     }
     else
     {
       focal_length = 676.5;
-      hfov = 51.2 / 57.3;
+      hfov = 51.2;
     }
-    thita = hfov / 2; //radians
+    thita = hfov / 2 /57.3; //radians
 
     // Distance = Height_in_cm_of_face * focal_length / Heigth_in_pixels
     distance = face_height * focal_length / msg->roi.height;//cm
     // distance from the center of the image in pixels
-    displacement =  msg->roi.x_offset + msg->roi.width / 2 - image_width/2;
+    displacement =  msg->roi.x_offset + msg->roi.width / 2 - image_width/2; ??????????????????????????????
     // angle from the center of the image in radians
     phi = atan   ((2 * displacement * tan(thita) / image_width)) ;
+
 
     x = distance * sin(phi);//cm
     z = distance * cos(phi);
@@ -96,6 +97,7 @@ z()
 
     // RCLCPP_INFO(logger, "imagewidth = %d ", image_width);
     RCLCPP_INFO(logger, "distance = %lf ", distance);
+    RCLCPP_INFO(logger, "displacement  = %lf ", displacement);
     RCLCPP_INFO(logger, "phi = %f deg", phi*57.3);
     RCLCPP_INFO(logger, "x = %f cm" ,x);
     RCLCPP_INFO(logger, "z = %f cm", z);
