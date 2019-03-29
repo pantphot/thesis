@@ -38,8 +38,18 @@ ament_target_dependencies(detection
   "nettools_msgs"
 )
 
+add_executable(position_estimation
+  src/position_estimation.cpp
+  )
+
+ament_target_dependencies(position_estimation
+  "rclcpp"
+  "nettools_msgs"
+)
+
 install(TARGETS
   detection
+  position_estimation
   DESTINATION lib/${PROJECT_NAME})
 
 

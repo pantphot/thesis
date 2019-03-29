@@ -159,6 +159,7 @@ void Detector::detectAndDisplay(const shared_ptr<sensor_msgs::msg::Image> msg, r
     waitKey(1);
   }
   // rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+  msg_out.image_width = msg->width;
   msg_out.header.frame_id = std::to_string(i);
   msg_out.header.stamp = clock->now();
   pub->publish(msg_out);
