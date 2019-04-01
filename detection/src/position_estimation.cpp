@@ -28,15 +28,21 @@ Position_Estimator::Position_Estimator (rmw_qos_profile_t custom_qos_profile)
 : Node ("position_estimator"),
 custom_qos_profile(custom_qos_profile),
 image_width(),
+image_height(),
 face_height(16.0),
 focal_length(),
 hfov(),
-thita(),
+vfov(),
+thita_x(),
+thita_y(),
 distance(),
-displacement(),
-phi(),
+displacement_x(),
+displacement_y(),
+phi_x(),
+phi_y(),
 x(),
-z()
+z(),
+y()
 
 {
   //   // Initialize publisher that publishes the ROI
@@ -64,46 +70,59 @@ z()
   // Receive region_of_interest and estimate person position
   void Position_Estimator::estimate(const std::shared_ptr<nettools_msgs::msg::RoiWithHeader> msg, rclcpp::Logger logger)
   {
-    RCLCPP_INFO(logger, "Received message #%s", msg->header.frame_id.c_str());
+    // RCLCPP_INFO(logger, "Received message #%s", msg->header.frame_id.c_str());
     // Calculations based on camera reference point (0,0)
 
     // x_radians_per_pixel = 48.5/57.0/image_width
     image_width = msg->image_width;
+    image_height = msg->image_height;
     face_height = 16.0; //cm
 
     if (image_width == 352)
     {
       focal_length = 427.5; // measured in pixels
       hfov = 48.5 ; //radians
+      vfov = 38.1;
     }
     else
     {
       focal_length = 676.5;
       hfov = 51.2;
+      vfov = 39.82;
     }
-    thita = hfov / 2 /57.3; //radians
+    thita_x = hfov / 2 /57.3; //radians
+    thita_y = vfov / 2 /57.3; //radians
 
     // Distance = Height_in_cm_of_face * focal_length / Heigth_in_pixels
     distance = face_height * focal_length / float(msg->roi.height);//cm
     // distance from the center of the image in pixels
-    displacement =  float(msg->roi.x_offset) + float(msg->roi.width) / 2 - float(image_width/2);
+    displacement_x = float(msg->roi.x_offset) + float(msg->roi.width) / 2 - float(image_width/2);
+    displacement_y = float(image_height/2) - (float(msg->roi.y_offset) + float(msg->roi.height) / 2);
     // angle from the center of the image in radians
-    phi = atan   ((2 * displacement * tan(thita) / image_width)) ;
+    phi_x = atan   ((2 * displacement_x * tan(thita_x) / image_width)) ;
+    phi_y = atan   ((2 * displacement_y * tan(thita_y) / image_height)) ;
 
 
-    x = distance * sin(phi);//cm
-    z = distance * cos(phi);
+    x = distance * sin(phi_x);//cm
+    z = distance * cos(phi_x);
+    y = distance * sin(phi_y);
+    // auto z_y = cos(phi_y);
 
 
-    // RCLCPP_INFO(logger, "imagewidth = %d ", image_width);
-    RCLCPP_INFO(logger, "msg->roi.x_offset = %d ", msg->roi.x_offset);
-    RCLCPP_INFO(logger, "msg->roi.width/2 = %d ",msg->roi.width/2);
-    RCLCPP_INFO(logger, "image_width/2 = %d ",image_width/2);
+    // // RCLCPP_INFO(logger, "imagewidth = %d ", image_width);
+    // RCLCPP_INFO(logger, "image_height = %d ", image_height);
+    // RCLCPP_INFO(logger, "msg->roi.y_offset = %d ", msg->roi.y_offset);
+    // RCLCPP_INFO(logger, "msg->roi.heigth/2 = %d ",msg->roi.height/2);
+    // RCLCPP_INFO(logger, "image_height/2 = %d ",image_height/2);
+    // RCLCPP_INFO(logger, "displacement_x  = %lf ", displacement_x);
+    // RCLCPP_INFO(logger, "displacement_y  = %lf ", displacement_y);
     RCLCPP_INFO(logger, "distance = %lf ", distance);
-    RCLCPP_INFO(logger, "displacement  = %lf ", displacement);
-    RCLCPP_INFO(logger, "phi = %f deg", phi*57.3);
+    // RCLCPP_INFO(logger, "phi_x = %f deg", phi_x*57.3);
+    // RCLCPP_INFO(logger, "phi_y = %f deg", phi_y*57.3);
     RCLCPP_INFO(logger, "x = %f cm" ,x);
-    RCLCPP_INFO(logger, "z = %f cm", z);
+    RCLCPP_INFO(logger, "y = %f cm", y);
+    // RCLCPP_INFO(logger, "z_y = %f cm", z_y);
+    RCLCPP_INFO(logger, "z_x = %f cm", z);
 
 
     // std_msgs/Header header       # Two-integer timestamp that is expressed as seconds and nanoseconds. builtin_interfaces/Time stamp

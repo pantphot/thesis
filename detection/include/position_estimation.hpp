@@ -16,15 +16,21 @@
       rclcpp::Subscription<nettools_msgs::msg::RoiWithHeader>::SharedPtr sub;
       rmw_qos_profile_t custom_qos_profile;
       uint image_width;
+      uint image_height;
       double face_height;
       double focal_length;
       double hfov ;
-      double thita;
+      double vfov ;
+      double thita_x;
+      double thita_y;
       double distance;
-      double displacement;
-      double phi;
+      double displacement_x;
+      double displacement_y;
+      double phi_x;
+      double phi_y;
       double x;
       double z;
+      double y;
   };
 
 #endif

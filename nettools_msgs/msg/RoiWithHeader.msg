@@ -5,3 +5,4 @@ sensor_msgs/RegionOfInterest roi#uint32 x_offset  Leftmost pixel of the ROI
                                 #uint32 height    # Height of ROI
                                 #uint32 width     # Width of ROI
 uint32 image_width     # original image width
+uint32 image_height     # original image height
