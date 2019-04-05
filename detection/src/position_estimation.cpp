@@ -3,7 +3,8 @@
 *   Author: Pantelis Photiou
 *   Created: Mar 2019
 *   Initializes a ROS 2 node which subscribes to a region of interest topic
-*   and performs position estimation of detected face .
+*   and performs position estimation of detected face using the position of the
+*   camera as the reference point. Publishes on "detection_pose" topic.
 */
 
 #include <cstdio>
@@ -13,17 +14,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "position_estimation.hpp"
 #include <cmath>
-// #include "rclcpp/clock.hpp"
-// #include "rclcpp/time.hpp"
-// #include "rclcpp/time_source.hpp"
-// #include "sensor_msgs/msg/image.hpp"
-// #include "options.hpp"
-// #include "detection.hpp"
-//
-// using namespace std;
-// using namespace cv;
-//
-//
+
 Position_Estimator::Position_Estimator (rmw_qos_profile_t custom_qos_profile)
 : Node ("position_estimator"),
 custom_qos_profile(custom_qos_profile),
@@ -45,18 +36,19 @@ z(),
 y()
 
 {
-  //   // Initialize publisher that publishes the ROI
-  //   pub = this->create_publisher<nettools_msgs::msg::RoiWithHeader>(
-  //     "region_of_interest", rmw_qos_profile_default);
-  //
+  //   // Initialize publisher that publishes the pose
+  pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
+    "detection_pose", rmw_qos_profile_default);
+
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
   sub = this->create_subscription<nettools_msgs::msg::RoiWithHeader>(
     "region_of_interest", std::bind(&Position_Estimator::callback, this,  std::placeholders::_1),custom_qos_profile);
 
-    //   // Initialize clock to timestamp the output messages
-    //   clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
-    //   std::cout << custom_qos_profile.depth << '\n';
+
+      // Initialize clock to timestamp the output messages
+  clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+
   }
   //
   Position_Estimator::~Position_Estimator(){}
@@ -70,10 +62,6 @@ y()
   // Receive region_of_interest and estimate person position
   void Position_Estimator::estimate(const std::shared_ptr<nettools_msgs::msg::RoiWithHeader> msg, rclcpp::Logger logger)
   {
-    // RCLCPP_INFO(logger, "Received message #%s", msg->header.frame_id.c_str());
-    // Calculations based on camera reference point (0,0)
-
-    // x_radians_per_pixel = 48.5/57.0/image_width
     image_width = msg->image_width;
     image_height = msg->image_height;
     face_height = 16.0; //cm
@@ -106,8 +94,6 @@ y()
     x = distance * sin(phi_x);//cm
     z = distance * cos(phi_x);
     y = distance * sin(phi_y);
-    // auto z_y = cos(phi_y);
-
 
     // // RCLCPP_INFO(logger, "imagewidth = %d ", image_width);
     // RCLCPP_INFO(logger, "image_height = %d ", image_height);
@@ -124,18 +110,19 @@ y()
     // RCLCPP_INFO(logger, "z_y = %f cm", z_y);
     RCLCPP_INFO(logger, "z_x = %f cm", z);
 
+    msg_out.header.frame_id = "external_camera";
+    msg_out.header.stamp = clock -> now();
+    msg_out.pose.position.y = -x/100;
+    msg_out.pose.position.z = y/100;
+    msg_out.pose.position.x = z/100;
+    msg_out.pose.orientation.x = 0.0;
+    msg_out.pose.orientation.y = 0.0;
+    msg_out.pose.orientation.z = 0.0;
+    msg_out.pose.orientation.w = 1.0;
 
-    // std_msgs/Header header       # Two-integer timestamp that is expressed as seconds and nanoseconds. builtin_interfaces/Time stamp
-    //                              # sequence number. string frame_id
-    // sensor_msgs/RegionOfInterest roi #uint32 x_offset  Leftmost pixel of the ROI
-    //                                  #uint32 y_offset  Topmost pixel of the ROI
-    //                                  #uint32 height    # Height of ROI
-    //                                  #uint32 width     # Width of ROI
-    //
+    pub -> publish(msg_out);
+
   }
-
-
-
 
   int main(int argc, char * argv[])
   {
@@ -148,16 +135,11 @@ y()
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
     // Configure parameters with command line options.
-    // todo add height width
 
-    // Set the parameters of the quality of service profile. Initialize as the default profile
-    // and set the QoS parameters specified on the command line.
+    // Set the parameters of the quality of service profile. Initialize as the default profile.
+
     rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
-    // custom_qos_profile.depth = depth;
-    // custom_qos_profile.reliability = reliability_policy;
-    // custom_qos_profile.history = history_policy;
-
-
+    
     // Create node and spin
     rclcpp::spin(std::make_shared<Position_Estimator>(custom_qos_profile));
 

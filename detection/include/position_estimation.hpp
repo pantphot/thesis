@@ -2,8 +2,9 @@
 #define __POSITION_ESTIMATION_POSITION_ESTIMATION_HPP
   #include "rclcpp/rclcpp.hpp"
   #include "nettools_msgs/msg/roi_with_header.hpp"
-  // #include "rclcpp/clock.hpp"
-  // #include "rclcpp/time.hpp"
+  #include "geometry_msgs/msg/pose_stamped.hpp"
+  #include "rclcpp/clock.hpp"
+  #include "rclcpp/time.hpp"
   // #include "rclcpp/time_source.hpp"
 
   class Position_Estimator : public rclcpp::Node {
@@ -14,7 +15,11 @@
       ~Position_Estimator();
 
       rclcpp::Subscription<nettools_msgs::msg::RoiWithHeader>::SharedPtr sub;
+      rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub;
+      geometry_msgs::msg::PoseStamped msg_out;
       rmw_qos_profile_t custom_qos_profile;
+      rclcpp::Clock::SharedPtr clock;
+
       uint image_width;
       uint image_height;
       double face_height;

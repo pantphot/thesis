@@ -17,6 +17,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(nettools_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 #find_package(ament_cmake_python REQUIRED)
 #find_package(python_cmake_module REQUIRED)
@@ -45,12 +46,18 @@ add_executable(position_estimation
 ament_target_dependencies(position_estimation
   "rclcpp"
   "nettools_msgs"
+  "geometry_msgs"
 )
 
 install(TARGETS
   detection
   position_estimation
   DESTINATION lib/${PROJECT_NAME})
+
+#launch file
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/)
 
 
 ament_package()
