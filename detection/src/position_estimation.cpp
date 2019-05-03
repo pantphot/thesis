@@ -37,8 +37,8 @@ y()
 
 {
   //   // Initialize publisher that publishes the pose
-  pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
-    "detection_pose", rmw_qos_profile_default);
+  pub = this->create_publisher<geometry_msgs::msg::PointStamped>(
+    "detection_point", rmw_qos_profile_default);
 
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
@@ -112,13 +112,16 @@ y()
 
     msg_out.header.frame_id = "external_camera";
     msg_out.header.stamp = clock -> now();
-    msg_out.pose.position.y = -x/100;
-    msg_out.pose.position.z = y/100;
-    msg_out.pose.position.x = z/100;
-    msg_out.pose.orientation.x = 0.0;
-    msg_out.pose.orientation.y = 0.0;
-    msg_out.pose.orientation.z = 0.0;
-    msg_out.pose.orientation.w = 1.0;
+    msg_out.point.y = -x/100;
+    msg_out.point.z = y/100;
+    msg_out.point.x = z/100;
+    // msg_out.pose.position.y = -x/100;
+    // msg_out.pose.position.z = y/100;
+    // msg_out.pose.position.x = z/100;
+    // msg_out.pose.orientation.x = 0.0;
+    // msg_out.pose.orientation.y = 0.0;
+    // msg_out.pose.orientation.z = 0.0;
+    // msg_out.pose.orientation.w = 1.0;
 
     pub -> publish(msg_out);
 
@@ -139,7 +142,7 @@ y()
     // Set the parameters of the quality of service profile. Initialize as the default profile.
 
     rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
-    
+
     // Create node and spin
     rclcpp::spin(std::make_shared<Position_Estimator>(custom_qos_profile));
 
