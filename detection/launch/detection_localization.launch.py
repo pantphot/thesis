@@ -5,7 +5,7 @@
 import argparse
 import os
 import sys
-from launch.legacy import LaunchDescription
+from launch import LaunchDescription
 import launch_ros.actions
 from ament_index_python.packages import get_package_share_directory
 from launch.legacy import LaunchDescriptor
@@ -33,7 +33,7 @@ def launch(launch_descriptor, argv):
     package = 'tf2_ros'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
-        '-1.602','1.047','1.11','0.0','0.0','0.0','1.0','map','external_camera'],
+        '-1.58','0.95','1.11','0.0','0.0','0.0','1.0','map','external_camera'],
         name='static_tf_pub_map_external',
         exit_handler=restart_exit_handler,
     )

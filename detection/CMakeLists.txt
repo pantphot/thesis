@@ -18,13 +18,15 @@ find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(nettools_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(rclpy REQUIRED)
 
 #find_package(ament_cmake_python REQUIRED)
 #find_package(python_cmake_module REQUIRED)
 
 include_directories(include)
 
-#ament_python_install_package(scripts/)
+ament_python_install_package(scripts/)
 
 add_executable(detection
   src/detection.cpp
@@ -49,9 +51,25 @@ ament_target_dependencies(position_estimation
   "geometry_msgs"
 )
 
+#add_executable(target_publisher
+#  src/target_publisher.cpp
+#  )
+
+
+#ament_target_dependencies(target_publisher
+#  "rclpy"
+#  "tf2_ros"
+#  "geometry_msgs"
+#  "tf2_geometry_msgs"
+#  )
+
 install(TARGETS
   detection
   position_estimation
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/target_publisher.py
   DESTINATION lib/${PROJECT_NAME})
 
 #launch file

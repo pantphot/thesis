@@ -38,7 +38,7 @@ y()
 {
   //   // Initialize publisher that publishes the pose
   pub = this->create_publisher<geometry_msgs::msg::PointStamped>(
-    "detection_point", rmw_qos_profile_default);
+    "detected_point", rmw_qos_profile_default);
 
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
