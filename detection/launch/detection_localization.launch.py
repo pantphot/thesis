@@ -27,9 +27,10 @@ def launch(launch_descriptor, argv):
     package = 'detection'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-        name='goal_publisher_node',
+        name='position_estimation_node',
         exit_handler=restart_exit_handler,
     )
+
     package = 'tf2_ros'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
@@ -37,13 +38,21 @@ def launch(launch_descriptor, argv):
         name='static_tf_pub_map_external',
         exit_handler=restart_exit_handler,
     )
-    package = 'ros1_bridge'
+    package = 'detection'
     ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='dynamic_bridge'), '--bridge-all-topics'],
-        name='ros_bridge',
-        exit_handler=restart_exit_handler,
-        output_handlers=[ConsoleOutput()],
+       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
+       name='target_publisher_node',
+       exit_handler=restart_exit_handler,
+       output_handlers=[ConsoleOutput()],
     )
+
+#    package = 'ros1_bridge'
+#   ld.add_process(
+#        cmd=[get_executable_path(package_name=package, executable_name='dynamic_bridge'), '--bridge-all-topics'],
+#       name='ros_bridge',
+#       exit_handler=restart_exit_handler,
+#       output_handlers=[ConsoleOutput()],
+ #   )
 
     return ld
         # launch_ros.actions.Node(
