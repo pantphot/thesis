@@ -51,21 +51,22 @@ ament_target_dependencies(position_estimation
   "geometry_msgs"
 )
 
-#add_executable(target_publisher
-#  src/target_publisher.cpp
-#  )
+add_executable(target_publisher
+  src/target_publisher.cpp
+  )
 
 
-#ament_target_dependencies(target_publisher
-#  "rclpy"
-#  "tf2_ros"
-#  "geometry_msgs"
-#  "tf2_geometry_msgs"
-#  )
+ament_target_dependencies(target_publisher
+  "rclpy"
+  "tf2_ros"
+  "geometry_msgs"
+  "tf2_geometry_msgs"
+  )
 
 install(TARGETS
   detection
   position_estimation
+  target_publisher
   DESTINATION lib/${PROJECT_NAME})
 
 install(PROGRAMS

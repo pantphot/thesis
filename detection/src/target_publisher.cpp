@@ -16,6 +16,7 @@
 #include <tf2_ros/transform_listener.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/buffer_interface.h>
+#include <tf2/convert.h>
 #include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/msg/point_stamped.hpp>
 #include <cmath>
@@ -73,7 +74,7 @@ tfBuffer()
     temp = *msg;
     auto tf_listener = tf2_ros::TransformListener(tfBuffer);
     // rclcpp::duration dur;
-    tf2_ros::BufferInterface::transform<geometry_msgs::msg::PoseStamped>(temp,"map",rclcpp::Duration(0.0) );
+    tfBuffer.transform(*msg,msg_out,"map");
 
     //RCLCPP_INFO(logger, msg);
     // // RCLCPP_INFO(logger, "phi_x = %f deg", phi_x*57.3);
@@ -86,11 +87,11 @@ tfBuffer()
 
 
 
-    msg_out.header.frame_id = "external_camera";
-    msg_out.header.stamp = clock -> now();
-    msg_out.point.y = -x/100;
-    msg_out.point.z = y/100;
-    msg_out.point.x = z/100;
+    //msg_out.header.frame_id = "external_camera";
+    //msg_out.header.stamp = clock -> now();
+    //msg_out.point.y = -x/100;
+    //msg_out.point.z = y/100;
+    //msg_out.point.x = z/100;
     // msg_out.pose.position.y = -x/100;
     // msg_out.pose.position.z = y/100;
     // msg_out.pose.position.x = z/100;
