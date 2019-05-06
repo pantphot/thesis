@@ -15,9 +15,8 @@
 #include "position_estimation.hpp"
 #include <cmath>
 
-Position_Estimator::Position_Estimator (rmw_qos_profile_t custom_qos_profile)
+Position_Estimator::Position_Estimator ()
 : Node ("position_estimator"),
-custom_qos_profile(custom_qos_profile),
 image_width(),
 image_height(),
 face_height(16.0),
@@ -43,7 +42,7 @@ y()
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
   sub = this->create_subscription<nettools_msgs::msg::RoiWithHeader>(
-    "region_of_interest", std::bind(&Position_Estimator::callback, this,  std::placeholders::_1),custom_qos_profile);
+    "region_of_interest", std::bind(&Position_Estimator::callback, this,  std::placeholders::_1),rmw_qos_profile_default);
 
 
       // Initialize clock to timestamp the output messages
@@ -51,7 +50,6 @@ y()
 
   }
   //
-  Position_Estimator::~Position_Estimator(){}
   //
   // Callback receiving the region of interest
   void Position_Estimator::callback(const std::shared_ptr<nettools_msgs::msg::RoiWithHeader> msg)
@@ -126,28 +124,5 @@ y()
     pub -> publish(msg_out);
 
   }
-
-  int main(int argc, char * argv[])
-  {
-    // Pass command line arguments to rclcpp.
-    rclcpp::init(argc, argv);
-
-    // Force flush of the stdout buffer.
-    // This ensures a correct sync of all prints
-    // even when executed simultaneously within a launch file.
-    setvbuf(stdout, NULL, _IONBF, BUFSIZ);
-
-    // Configure parameters with command line options.
-
-    // Set the parameters of the quality of service profile. Initialize as the default profile.
-
-    rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
-
-    // Create node and spin
-    rclcpp::spin(std::make_shared<Position_Estimator>(custom_qos_profile));
-
-    std::cerr << "Shutdown" << std::endl;
-    rclcpp::shutdown();
-
-    return 0;
-  }
+#include "class_loader/register_macro.hpp"
+CLASS_LOADER_REGISTER_CLASS(Position_Estimator, rclcpp::Node)

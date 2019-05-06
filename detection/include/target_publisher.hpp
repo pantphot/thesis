@@ -8,20 +8,21 @@
   #include "tf2_ros/buffer.h"
   #include "tf2_ros/buffer_interface.h"
   #include <tf2_ros/transform_listener.h>
-
+  #include "visibility_control.h"
+  #include "rmw/qos_profiles.h"
   // #include "rclcpp/time_source.hpp"
 
   class Target_Publisher : public rclcpp::Node {
     public:
-      Target_Publisher(rmw_qos_profile_t custom_qos_profile);
+      Target_Publisher();
       void callback(const std::shared_ptr<geometry_msgs::msg::PoseStamped> msg);
       void translate(const std::shared_ptr<geometry_msgs::msg::PoseStamped> msg, rclcpp::Logger logger);
-      ~Target_Publisher();
+      // ~Target_Publisher();
 
       rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub;
       rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub;
       geometry_msgs::msg::PoseStamped msg_out;
-      rmw_qos_profile_t custom_qos_profile;
+      // rmw_qos_profile_t custom_qos_profile;
       rclcpp::Clock::SharedPtr clock;
       tf2_ros::Buffer tfBuffer;
       std::string target_fr = "map";
