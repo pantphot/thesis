@@ -20,7 +20,7 @@ def launch(launch_descriptor, argv):
     package = 'detection'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='detection'),
-        '-r', '0', '-s', '1'],
+        '-r', '0', '-s', '0'],
         name='detection_node',
         exit_handler=restart_exit_handler,
     )

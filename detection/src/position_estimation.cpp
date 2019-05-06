@@ -101,14 +101,13 @@ y()
     // RCLCPP_INFO(logger, "msg->roi.heigth/2 = %d ",msg->roi.height/2);
     // RCLCPP_INFO(logger, "image_height/2 = %d ",image_height/2);
     // RCLCPP_INFO(logger, "displacement_x  = %lf ", displacement_x);
-    // RCLCPP_INFO(logger, "displacement_y  = %lf ", displacement_y);
-    RCLCPP_INFO(logger, "distance = %lf ", distance);
+    // RCLCPP_INFO(logger, "displacement_y  = %lf ", displacement_y)
     // RCLCPP_INFO(logger, "phi_x = %f deg", phi_x*57.3);
     // RCLCPP_INFO(logger, "phi_y = %f deg", phi_y*57.3);
-    RCLCPP_INFO(logger, "x = %f cm" ,x);
-    RCLCPP_INFO(logger, "y = %f cm", y);
-    // RCLCPP_INFO(logger, "z_y = %f cm", z_y);
-    RCLCPP_INFO(logger, "z_x = %f cm", z);
+    RCLCPP_INFO(logger, "distance = %lf ", distance);
+    //RCLCPP_INFO(logger, "x = %f cm" ,x);
+    //RCLCPP_INFO(logger, "y = %f cm", y);
+    //RCLCPP_INFO(logger, "z_x = %f cm", z);
 
     msg_out.header.frame_id = "external_camera";
     msg_out.header.stamp = clock -> now();

@@ -57,11 +57,13 @@ tf2_listener(tfBuffer)
     temp = *msg;
     // rclcpp::duration dur;
     try{
-    tfBuffer.transform(*msg,msg_out,target_fr);
-    msg_out.pose.position.z=0;
-    msg_out.header.stamp = clock -> now();
-    pub -> publish(msg_out);
-
+    	tfBuffer.transform(*msg,msg_out,target_fr);
+    	if (msg_out.pose.position.x < 10000.0){
+    		msg_out.pose.position.z=0;
+    		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out.pose.position.x,msg_out.pose.position.y);
+		msg_out.header.stamp = clock -> now();
+    		pub -> publish(msg_out);
+   	 }
     }
     catch (tf2::LookupException e)
     {std::cout << e.what() << '\n';}
