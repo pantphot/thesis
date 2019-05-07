@@ -31,14 +31,7 @@ def launch(launch_descriptor, argv):
         name='cam2image_node',
         exit_handler=restart_exit_handler,
     )
-    package = 'detection'
-    ld.add_process(
-       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
-       name='target_publisher_node',
-       exit_handler=restart_exit_handler,
-       output_handlers=[ConsoleOutput()],
-    )
-
+    
     return ld
 
 def main(argv=sys.argv[1:]):
