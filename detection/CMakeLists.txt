@@ -67,14 +67,29 @@ ament_target_dependencies(target_publisher
   "tf2_geometry_msgs"
   "kdl_parser"
   "orocos_kdl"
-
   )
 
+add_executable(unified_target_publisher
+  src/unified_target_publisher.cpp
+  )
+
+
+ament_target_dependencies(unified_target_publisher
+  "rclpy"
+  "tf2_ros"
+  "nettools_msgs"
+  "geometry_msgs"
+  "tf2"
+  "tf2_geometry_msgs"
+  "kdl_parser"
+  "orocos_kdl"
+  )
 
 install(TARGETS
   detection
   position_estimation
   target_publisher
+  unified_target_publisher
   DESTINATION lib/${PROJECT_NAME})
 
 #install(PROGRAMS

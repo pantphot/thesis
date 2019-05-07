@@ -52,8 +52,7 @@ tf2_listener(tfBuffer)
   // Receive region_of_interest and estimate person position
   void Target_Publisher::translate(const std::shared_ptr<geometry_msgs::msg::PoseStamped> msg, rclcpp::Logger logger)
   {
-    geometry_msgs::msg::PoseStamped temp;
-    temp = *msg;
+    
     // rclcpp::duration dur;
     try{
     	tfBuffer.transform(*msg,msg_out,target_fr);
