@@ -46,29 +46,8 @@ def launch(launch_descriptor, argv):
        output_handlers=[ConsoleOutput()],
     )
 
-#    package = 'ros1_bridge'
-#   ld.add_process(
-#        cmd=[get_executable_path(package_name=package, executable_name='dynamic_bridge'), '--bridge-all-topics'],
-#       name='ros_bridge',
-#       exit_handler=restart_exit_handler,
-#       output_handlers=[ConsoleOutput()],
- #   )
-
     return ld
-        # launch_ros.actions.Node(
-        #     package='detection', node_executable='detection', output='screen',
-        #         arguments=['-r', '0', '-s', '1']),
-        #         #arguments=['-r 0', '-s 1']),
-        # launch_ros.actions.Node(
-        #     package='detection', node_executable='position_estimation', output='screen'),
-        # #launch_ros.actions.Node(
-        # #    package='ros1_bridge', node_executable='dynamic_bridge', output='screen',
-        # # #        arguments=['--bridge-all-topics']),
-        # launch_ros.actions.Node(
-        #     package='tf2_ros', node_executable='static_transform_publisher', output='screen',
-        #         #arguments=['-1.44','0.91','1.1','0.0','0.0','0.0','1.0','map','external_camera']),
-        #         arguments=['-1.602','1.047','1.11','0.0','0.0','0.0','1.0','map','external_camera']),
-        # ])
+
 
 def main(argv=sys.argv[1:]):
     launcher = DefaultLauncher()

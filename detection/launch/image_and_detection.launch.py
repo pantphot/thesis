@@ -31,22 +31,6 @@ def launch(launch_descriptor, argv):
         name='cam2image_node',
         exit_handler=restart_exit_handler,
     )
-    pi@ros2pi:~/ros2_overlay $ ros2 run image_tools cam2image -x  352 -y 288 -r 0 -f 5
-
-    # package = 'detection'
-    # ld.add_process(
-    #     cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-    #     name='position_estimation_node',
-    #     exit_handler=restart_exit_handler,
-    # )
-    #
-    # package = 'tf2_ros'
-    # ld.add_process(
-    #     cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
-    #     '-1.58','0.95','1.11','0.0','0.0','0.0','1.0','map','external_camera'],
-    #     name='static_tf_pub_map_external',
-    #     exit_handler=restart_exit_handler,
-    # )
     package = 'detection'
     ld.add_process(
        cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
