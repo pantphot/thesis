@@ -24,13 +24,6 @@ def launch(launch_descriptor, argv):
         name='detection_node',
         exit_handler=restart_exit_handler,
     )
-    package = 'detection'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-        name='position_estimation_node',
-        exit_handler=restart_exit_handler,
-    )
-
     package = 'tf2_ros'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
@@ -40,12 +33,11 @@ def launch(launch_descriptor, argv):
     )
     package = 'detection'
     ld.add_process(
-       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
-       name='target_publisher_node',
-       exit_handler=restart_exit_handler,
-       output_handlers=[ConsoleOutput()],
+        cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher')],
+        name='unified_target_publisher_node',
+        exit_handler=restart_exit_handler,
     )
-
+    
     return ld
 
 
