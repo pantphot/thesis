@@ -1,10 +1,9 @@
 /*
-*   position_estimation.cpp
+*   target_publisher.cpp
 *   Author: Pantelis Photiou
-*   Created: Mar 2019
-*   Initializes a ROS 2 node which subscribes to a region of interest topic
-*   and performs position estimation of detected face using the position of the
-*   camera as the reference point. Publishes on "detection_pose" topic.
+*   Created: May 2019
+*   Initializes a ROS 2 node which subscribes to a detected_pose topic
+*   and performs frame transformation from external camera to map frame  Publishes on "move_base_simple/goal" topic a PoseStamped message.
 */
 
 #include <cstdio>
@@ -22,7 +21,7 @@
 #include "rclcpp/duration.hpp"
 
 Target_Publisher::Target_Publisher (rmw_qos_profile_t custom_qos_profile)
-: Node ("position_estimator"),
+: Node ("target_publisher"),
 custom_qos_profile(custom_qos_profile),
 tfBuffer(),
 msg_out(),
@@ -58,10 +57,10 @@ tf2_listener(tfBuffer)
     // rclcpp::duration dur;
     try{
     	tfBuffer.transform(*msg,msg_out,target_fr);
-    	if (msg_out.pose.position.x < 10000.0){
-    		msg_out.pose.position.z=0;
+      	if (msg_out.pose.position.x < 10000.0){
+      		msg_out.pose.position.z=0;
     		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out.pose.position.x,msg_out.pose.position.y);
-		msg_out.header.stamp = clock -> now();
+		    msg_out.header.stamp = clock -> now();
     		pub -> publish(msg_out);
    	 }
     }
