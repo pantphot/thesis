@@ -1,0 +1,69 @@
+#   detection_localization.launch.py
+#   Author: Pantelis Photiou
+#   Created: Mar 2019
+#
+import argparse
+import os
+import sys
+from launch import LaunchDescription
+import launch_ros.actions
+from ament_index_python.packages import get_package_share_directory
+from launch.legacy import LaunchDescriptor
+from launch.legacy.exit_handler import restart_exit_handler
+from launch.legacy.launcher import DefaultLauncher
+from launch.legacy.output_handler import ConsoleOutput
+from ros2run.api import get_executable_path
+
+
+def launch(launch_descriptor, argv):
+    ld = launch_descriptor
+    package = 'detection'
+    ld.add_process(
+        cmd=[get_executable_path(package_name=package, executable_name='detection'),
+        '-r', '0', '-s', '0'],
+        name='detection_node',
+        exit_handler=restart_exit_handler,
+    )
+    package = 'image_tools'
+    ld.add_process(
+        cmd=[get_executable_path(package_name=package, executable_name='cam2image'),
+        '-x', '352', '-y', '288','-r', '0','-f', '5'],
+        name='cam2image_node',
+        exit_handler=restart_exit_handler,
+    )
+    pi@ros2pi:~/ros2_overlay $ ros2 run image_tools cam2image -x  352 -y 288 -r 0 -f 5
+
+    # package = 'detection'
+    # ld.add_process(
+    #     cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
+    #     name='position_estimation_node',
+    #     exit_handler=restart_exit_handler,
+    # )
+    #
+    # package = 'tf2_ros'
+    # ld.add_process(
+    #     cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
+    #     '-1.58','0.95','1.11','0.0','0.0','0.0','1.0','map','external_camera'],
+    #     name='static_tf_pub_map_external',
+    #     exit_handler=restart_exit_handler,
+    # )
+    package = 'detection'
+    ld.add_process(
+       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
+       name='target_publisher_node',
+       exit_handler=restart_exit_handler,
+       output_handlers=[ConsoleOutput()],
+    )
+
+    return ld
+
+def main(argv=sys.argv[1:]):
+    launcher = DefaultLauncher()
+    launch_descriptor = launch(LaunchDescriptor(), argv)
+    launcher.add_launch_descriptor(launch_descriptor)
+    rc = launcher.launch()
+    return rc
+
+
+if __name__ == '__main__':
+    sys.exit(main())
