@@ -23,7 +23,7 @@
 Target_Publisher::Target_Publisher (rmw_qos_profile_t custom_qos_profile)
 : Node ("target_publisher"),
 custom_qos_profile(custom_qos_profile),
-tfBuffer(),
+tfBuffer(clock),
 msg_out(),
 tf2_listener(tfBuffer)
 {
@@ -52,7 +52,7 @@ tf2_listener(tfBuffer)
   // Receive region_of_interest and estimate person position
   void Target_Publisher::translate(const std::shared_ptr<geometry_msgs::msg::PoseStamped> msg, rclcpp::Logger logger)
   {
-    
+
     // rclcpp::duration dur;
     try{
     	tfBuffer.transform(*msg,msg_out,target_fr);
