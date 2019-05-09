@@ -17,7 +17,7 @@ from ros2run.api import get_executable_path
 
 def launch(launch_descriptor, argv):
     ld = launch_descriptor
-    
+
     package = 'tf2_ros'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
@@ -28,7 +28,7 @@ def launch(launch_descriptor, argv):
     package = 'detection'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher')],
-        name='unified_target_publisher_node',
+        name='target_publisher_node',
         exit_handler=restart_exit_handler,
     )
 
