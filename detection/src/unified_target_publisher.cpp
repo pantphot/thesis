@@ -1,10 +1,11 @@
 /*
-*   position_estimation.cpp
+*   unified_target_publisher.cpp
 *   Author: Pantelis Photiou
-*   Created: Mar 2019
+*   Created: May 2019
 *   Initializes a ROS 2 node which subscribes to a region of interest topic
 *   and performs position estimation of detected face using the position of the
-*   camera as the reference point. Publishes on "detection_pose" topic.
+*   camera as the reference point. The node then transforms the PoseStamped to map frame and publishes on
+*   "move_base_simple/goal" topic.
 */
 
 #include <cstdio>
@@ -19,6 +20,8 @@
 #include <tf2_ros/buffer_interface.h>
 #include <tf2/convert.h>
 #include <geometry_msgs/msg/point_stamped.hpp>
+#include "options.hpp"
+
 
 Unified_Target_Publisher::Unified_Target_Publisher (rmw_qos_profile_t custom_qos_profile)
 : Node ("unified_target_publisher"),
@@ -139,18 +142,30 @@ tf2_listener(tfBuffer)
   {
     // Pass command line arguments to rclcpp.
     rclcpp::init(argc, argv);
-
+    size_t depth = rmw_qos_profile_default.depth;
+    rmw_qos_reliability_policy_t reliability_policy = rmw_qos_profile_default.reliability;
+    rmw_qos_history_policy_t history_policy = rmw_qos_profile_default.history;
+    bool show_camera = false;
+    bool body = false;
+    std::string topic("region_of_interest");
     // Force flush of the stdout buffer.
     // This ensures a correct sync of all prints
     // even when executed simultaneously within a launch file.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
     // Configure parameters with command line options.
+    if (!parse_command_options(
+        argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, &body, &topic))
+    {
+      return 0;
+    }
 
     // Set the parameters of the quality of service profile. Initialize as the default profile.
 
     rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
-
+    custom_qos_profile.depth = depth;
+    custom_qos_profile.reliability = reliability_policy;
+    custom_qos_profile.history = history_policy;
     // Create node and spin
     rclcpp::spin(std::make_shared<Unified_Target_Publisher>(custom_qos_profile));
 

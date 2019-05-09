@@ -185,7 +185,6 @@ int main(int argc, char * argv[])
   setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
   // Configure parameters with command line options.
-  // todo add height width
   if (!parse_command_options(
       argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, &body, &topic))
   {

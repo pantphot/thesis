@@ -19,6 +19,8 @@
 #include <geometry_msgs/msg/point_stamped.hpp>
 #include <cmath>
 #include "rclcpp/duration.hpp"
+#include "options.hpp"
+
 
 Target_Publisher::Target_Publisher (rmw_qos_profile_t custom_qos_profile)
 : Node ("target_publisher"),
