@@ -54,8 +54,14 @@ tf2_listener(tfBuffer)
 
 
       // Initialize clock to timestamp the output messages
-  clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+  // clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+  // tf2_ros::Buffer tfBuffer;
+  // tf2_ros::TransformListener tf2_listener;
 
+  // tf2_ros::Buffer tfBuffer(Unified_Target_Publisher.get_clock());
+  // tf2_ros::Buffer tfBuffer(clock);
+  // tfBuffer(*clock,dur,false);
+  // tf2_ros::TransformListener tf2_listener(tfBuffer);
   }
   //
   Unified_Target_Publisher::~Unified_Target_Publisher(){}

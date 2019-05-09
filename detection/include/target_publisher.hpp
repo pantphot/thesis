@@ -19,7 +19,9 @@
       rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub;
       geometry_msgs::msg::PoseStamped msg_out;
       rmw_qos_profile_t custom_qos_profile;
-      rclcpp::Clock::SharedPtr clock;
+      // rclcpp::Clock::SharedPtr clock;
+      rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+
       tf2_ros::Buffer tfBuffer;
       std::string target_fr = "map";
       tf2_ros::TransformListener tf2_listener;
