@@ -21,7 +21,7 @@ def launch(launch_descriptor, argv):
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='detection'),
         '-r', '0', '-s', '0'],
-        name='detection_node',
+        name='detector',
         exit_handler=restart_exit_handler,
     )
     package = 'tf2_ros'
@@ -33,8 +33,9 @@ def launch(launch_descriptor, argv):
     )
     package = 'detection'
     ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher')],
-        name='unified_target_publisher_node',
+        cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher'),
+        '-r', '0'],
+        name='target_publisher',
         exit_handler=restart_exit_handler,
     )
     
