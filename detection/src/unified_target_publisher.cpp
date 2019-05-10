@@ -24,7 +24,7 @@
 
 
 Unified_Target_Publisher::Unified_Target_Publisher (rmw_qos_profile_t custom_qos_profile)
-: Node ("unified_target_publisher"),
+: Node ("target_publisher"),
 custom_qos_profile(custom_qos_profile),
 image_width(),
 image_height(),
