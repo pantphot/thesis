@@ -21,14 +21,14 @@ def launch(launch_descriptor, argv):
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='detection'),
         '-r', '0', '-s', '0'],
-        name='detection_node',
+        name='detector',
         exit_handler=restart_exit_handler,
     )
     package = 'image_tools'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='cam2image'),
         '-x', '352', '-y', '288','-r', '0','-f', '5'],
-        name='cam2image_node',
+        name='cam2image',
         exit_handler=restart_exit_handler,
     )
     

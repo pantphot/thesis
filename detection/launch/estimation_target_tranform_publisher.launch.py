@@ -20,7 +20,7 @@ def launch(launch_descriptor, argv):
     package = 'detection'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-        name='position_estimation_node',
+        name='position_estimator',
         exit_handler=restart_exit_handler,
     )
 
@@ -34,7 +34,7 @@ def launch(launch_descriptor, argv):
     package = 'detection'
     ld.add_process(
        cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
-       name='target_publisher_node',
+       name='target_publisher',
        exit_handler=restart_exit_handler,
        output_handlers=[ConsoleOutput()],
     )

@@ -29,7 +29,7 @@ def launch(launch_descriptor, argv):
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher'),
         '-r', '0'],
-        name='target_publisher_node',
+        name='target_publisher',
         exit_handler=restart_exit_handler,
     )
 
