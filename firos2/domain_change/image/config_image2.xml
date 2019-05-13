@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<is>
+  <!-- <topic_types>
+      <type name="sensor_msgs::msg::dds_::Image_">
+            <participants>
+                <participant name="ros2_pub"/>
+                <rtps>
+                    <builtin>
+                        <domainId>0</domainId>
+                    </builtin>
+                </rtps>
+            </participants>
+            <participants>
+                <participant name="ros2_sub"/>
+                <rtps>
+                    <builtin>
+                        <domainId>5</domainId>
+                    </builtin>
+                </rtps>
+            </participants>
+      </type> -->
+        <!-- <type name="std_msgs::msg::dds_::String_">
+            <participants>
+                <participant name="ros2"/>
+            </participants>
+      </type> -->
+
+  <!-- </topic_types> -->
+  <profiles>
+    <participant profile_name="ros2_pub">
+      <rtps>
+        <builtin>
+          <domainId>0</domainId>
+        </builtin>
+      </rtps>
+    </participant>
+
+    <participant profile_name="ros2_sub">
+      <rtps>
+        <builtin>
+          <domainId>5</domainId>
+        </builtin>
+      </rtps>
+    </participant>
+
+    <subscriber profile_name="ros2_publisher">
+      <topic>
+        <name>image</name>
+          <dataType>sensor_msgs::msg::dds_::Image_</dataType>
+      </topic>
+      <qos>
+        <partition>
+          <names>
+            <name>rt</name>
+          </names>
+        </partition>
+      </qos>
+      <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+    </subscriber>
+
+    <publisher profile_name="ros2_subscriber">
+      <topic>
+        <name>image</name>
+        <dataType>sensor_msgs::msg::dds_::Image_</dataType>
+      </topic>
+      <qos>
+        <partition>
+          <names>
+            <name>rt</name>
+          </names>
+        </partition>
+      </qos>
+      <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+      </publisher>
+  </profiles>
+
+  <connector name="domain_change">
+      <reader participant_profile="ros2_sub" subscriber_profile="ros2_subscriber"/>
+      <writer participant_profile="ros2_pub" publisher_profile="ros2_publisher"/>
+    </connector>
+</is>
