@@ -42,13 +42,19 @@ phi_y(),
 x(),
 z(),
 y(),
+r(0.2),
 tfBuffer(clock),
-tf2_listener(tfBuffer)
+tf2_listener(tfBuffer),
+yaw()
 
 {
   //   // Initialize publisher that publishes the pose
+  pub_real = this->create_publisher<geometry_msgs::msg::PoseStamped>(
+    "actual_goal", rmw_qos_profile_default);
+
   pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
     "move_base_simple/goal", rmw_qos_profile_default);
+
 
   // Initialize a subscriber that will receive the Image message.
   std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
@@ -114,23 +120,32 @@ tf2_listener(tfBuffer)
 
     RCLCPP_INFO(logger, "distance = %lf ", distance);
 
-    msg_out.header.frame_id = "external_camera";
-    msg_out.header.stamp = clock -> now();
-    msg_out.pose.position.y = -x/100;
-    msg_out.pose.position.z = y/100;
-    msg_out.pose.position.x = z/100;
-    msg_out.pose.orientation.x = 0.0;
-    msg_out.pose.orientation.y = 0.0;
-    msg_out.pose.orientation.z = 0.0;
-    msg_out.pose.orientation.w = 1.0;
+    msg_out_actual.header.frame_id = "external_camera";
+    msg_out_actual.header.stamp = clock -> now();
+    msg_out_actual.pose.position.y = -x/100;
+    msg_out_actual.pose.position.z = y/100;
+    msg_out_actual.pose.position.x = z/100;
+    msg_out_actual.pose.orientation.x = 0.0;
+    msg_out_actual.pose.orientation.y = 0.0;
+    msg_out_actual.pose.orientation.z = 0.0;
+    msg_out_actual.pose.orientation.w = 1.0;
+    // Get the yaw value from the imu
+    tf2::Quaternion temp_quat;
+    tf2::fromMsg(msg_out_actual.pose.orientation, temp_quat);
+    yaw = tf2::impl::getYaw(temp_quat);
 
     try{
-    	tfBuffer.transform(msg_out,msg_out,target_fr);
-      	if (msg_out.pose.position.x < 10000.0){
-      		msg_out.pose.position.z=0;
-    		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out.pose.position.x,msg_out.pose.position.y);
-		    msg_out.header.stamp = clock -> now();
-    		pub -> publish(msg_out);
+    	tfBuffer.transform(msg_out_actual,msg_out_actual,target_fr);
+      	if (msg_out_actual.pose.position.x < 10000.0){
+      		msg_out_actual.pose.position.z=0;
+    		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
+		    msg_out_actual.header.stamp = clock -> now();
+        msg_out = msg_out_actual;
+        //Give target with distance r from actual detection
+        msg_out.pose.position.x = msg_out_actual.pose.position.x + r * cos(yaw);
+        msg_out.pose.position.y = msg_out_actual.pose.position.y + r * cos(yaw);
+    		pub_real -> publish(msg_out_actual);
+        pub -> publish(msg_out);
    	 }
     }
     catch (tf2::LookupException e)

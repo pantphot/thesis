@@ -8,6 +8,9 @@
   #include "tf2_ros/buffer.h"
   #include "tf2_ros/buffer_interface.h"
   #include <tf2_ros/transform_listener.h>
+  #include <tf2/LinearMath/Quaternion.h>
+  #include <tf2/transform_datatypes.h>
+  #include <tf2/impl/utils.h>
 
 
   class Unified_Target_Publisher : public rclcpp::Node {
@@ -19,7 +22,11 @@
 
       rclcpp::Subscription<nettools_msgs::msg::RoiWithHeader>::SharedPtr sub;
       rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub;
+      rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_real;
+
+      geometry_msgs::msg::PoseStamped msg_out_actual;
       geometry_msgs::msg::PoseStamped msg_out;
+
       rmw_qos_profile_t custom_qos_profile;
       // rclcpp::Clock::SharedPtr clock;
       rclcpp::Clock::SharedPtr clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
@@ -45,6 +52,8 @@
       double x;
       double z;
       double y;
+      double r;
+      double yaw;
   };
 
 #endif
