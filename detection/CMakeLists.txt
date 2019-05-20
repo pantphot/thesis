@@ -86,11 +86,23 @@ ament_target_dependencies(unified_target_publisher
   "orocos_kdl"
   )
 
+add_executable(roi_compactor
+  src/roi_compactor.cpp
+  src/options.cpp
+  )
+
+
+ament_target_dependencies(roi_compactor
+  "rclcpp"
+  "nettools_msgs"
+  )
+
 install(TARGETS
   detection
   position_estimation
   target_publisher
   unified_target_publisher
+  roi_compactor
   DESTINATION lib/${PROJECT_NAME})
 
 #install(PROGRAMS

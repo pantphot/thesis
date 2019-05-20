@@ -24,6 +24,7 @@ rosidl_generate_interfaces(nettools_msgs
   "msg/TopicStatistics.msg"
   "msg/ByteArray.msg"
   "msg/RoiWithHeader.msg"
+  "msg/RoiWithHeaderCompact.msg"
 
   DEPENDENCIES std_msgs sensor_msgs
 )
