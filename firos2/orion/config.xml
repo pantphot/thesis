@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<is>
+    <profiles>
+        <participant profile_name="ros2_sub">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>rt/region_of_interest</name>
+                <dataType>nettools_msgs::msg::dds_::RoiWithHeader_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <participant profile_name="ros2_pub">
+            <rtps>
+                <builtin>
+                    <domainId>5</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>rt/region_of_interest</name>
+                    <dataType>nettools_msgs::msg::dds_::RoiWithHeader_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+          </publisher>
+    </profiles>
+
+    <bridge name="rtpstongsiv2">
+        <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+        <writer name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+        </writer>
+    </bridge>
+
+    <bridge name="ngsiv2tortps">
+        <library>libisbridgengsiv2lib.so</library>
+
+        <reader name="ngsiv2_subscriber">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>12345</value>
+            </property>
+            <!-- <property>
+                <name>listener_port</name>
+                <value>12345</value>
+            </property> -->
+        </reader>
+    </bridge>
+
+    <connector name="domain_change1">
+        <reader participant_profile="ros2_sub" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="rtpstongsiv2" writer_name="ngsiv2_publisher"/>
+        <!-- <transformation file="build/libuserlib.so" function="transform"/> -->
+    </connector>
+    <connector name="domain_change2">
+      <reader bridge_name="ngsiv2tortps" reader_name="ngsiv2_subscriber"/>
+      <writer participant_profile="ros2_pub" publisher_profile="ros2_publisher"/>
+      <!-- <transformation file="/home/ros2/firos2/examples/helloworld_ros2/build/libuserlib.so" function="transform"/> -->
+    </connector>
+</is>
