@@ -48,10 +48,15 @@ tf2_listener(tfBuffer),
 yaw()
 
 {
-  //   // Initialize publisher that publishes the pose
+   // Initialize publisher that publishes the pose of the detected face
   pub_real = this->create_publisher<geometry_msgs::msg::PoseStamped>(
     "actual_goal", rmw_qos_profile_default);
 
+   // Initialize publisher that publishes the point
+  pub_point = this->create_publisher<geometry_msgs::msg::Point>(
+    "detected_point", rmw_qos_profile_default);
+
+  // Initialize publisher that publishes the actual target for the robot
   pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
     "move_base_simple/goal", rmw_qos_profile_default);
 
@@ -137,16 +142,22 @@ yaw()
     try{
     	tfBuffer.transform(msg_out_actual,msg_out_actual,target_fr);
       	if (msg_out_actual.pose.position.x < 10000.0){
-      		msg_out_actual.pose.position.z=0;
-    		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
-		    msg_out_actual.header.stamp = clock -> now();
-        msg_out = msg_out_actual;
-        //Give target with distance r from actual detection
-        msg_out.pose.position.x = msg_out_actual.pose.position.x + r * cos(yaw);
-        msg_out.pose.position.y = msg_out_actual.pose.position.y + r * cos(yaw);
-    		pub_real -> publish(msg_out_actual);
-        pub -> publish(msg_out);
-   	 }
+
+      		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
+  		    msg_out_actual.header.stamp = clock -> now();
+          msg_out = msg_out_actual;
+          //Give target with distance r from actual detection
+          msg_out.pose.position.x = msg_out_actual.pose.position.x + r * cos(yaw);
+          msg_out.pose.position.y = msg_out_actual.pose.position.y + r * cos(yaw);
+          msg_out.pose.position.z=0;
+          point_msg.x = msg_out_actual.pose.position.x;
+          point_msg.y = msg_out_actual.pose.position.y;
+          point_msg.z = msg_out_actual.pose.position.z;
+
+      		pub_real -> publish(msg_out_actual);
+          pub -> publish(msg_out);
+          pub_point -> publish(point_msg);
+   	    }
     }
     catch (tf2::LookupException e)
     {std::cout << e.what() << '\n';}
