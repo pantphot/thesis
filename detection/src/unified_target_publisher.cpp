@@ -42,7 +42,7 @@ phi_y(),
 x(),
 z(),
 y(),
-r(0.2),
+r(0.4),
 tfBuffer(clock),
 tf2_listener(tfBuffer),
 yaw()
@@ -158,6 +158,13 @@ yaw()
           pub -> publish(msg_out);
           pub_point -> publish(point_msg);
    	    }
+        else {
+          RCLCPP_INFO(logger,"No one detected");
+          point_msg.x = 0;
+          point_msg.y = 0;
+          point_msg.z = 0;
+          pub_point -> publish(point_msg);
+        }
     }
     catch (tf2::LookupException e)
     {std::cout << e.what() << '\n';}
