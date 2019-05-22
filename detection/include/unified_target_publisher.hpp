@@ -2,6 +2,7 @@
 #define __UNIFIED_TARGET_PUBLISHER_UNIFIED_TARGET_PUBLISHER_HPP
   #include "rclcpp/rclcpp.hpp"
   #include "nettools_msgs/msg/roi_with_header.hpp"
+  #include "nettools_msgs/msg/point_header.hpp"
   #include "geometry_msgs/msg/pose_stamped.hpp"
   #include "geometry_msgs/msg/point.hpp"
   #include "rclcpp/clock.hpp"
@@ -24,11 +25,11 @@
       rclcpp::Subscription<nettools_msgs::msg::RoiWithHeader>::SharedPtr sub;
       rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub;
       rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_real;
-      rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr pub_point;
+      rclcpp::Publisher<nettools_msgs::msg::PointHeader>::SharedPtr pub_point;
 
       geometry_msgs::msg::PoseStamped msg_out_actual;
       geometry_msgs::msg::PoseStamped msg_out;
-      geometry_msgs::msg::Point point_msg;
+      nettools_msgs::msg::PointHeader point_msg;
 
       rmw_qos_profile_t custom_qos_profile;
       // rclcpp::Clock::SharedPtr clock;

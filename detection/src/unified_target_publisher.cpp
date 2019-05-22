@@ -12,14 +12,17 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cmath>
 #include "rclcpp/rclcpp.hpp"
+
+#include "rclcpp/time.hpp"
 #include "unified_target_publisher.hpp"
 #include <cmath>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/buffer_interface.h>
 #include <tf2/convert.h>
-#include <geometry_msgs/msg/point_stamped.hpp>
+
 #include "options.hpp"
 
 
@@ -53,7 +56,7 @@ yaw()
     "actual_goal", rmw_qos_profile_default);
 
    // Initialize publisher that publishes the point
-  pub_point = this->create_publisher<geometry_msgs::msg::Point>(
+  pub_point = this->create_publisher<nettools_msgs::msg::PointHeader>(
     "detected_point", rmw_qos_profile_default);
 
   // Initialize publisher that publishes the actual target for the robot
@@ -134,6 +137,18 @@ yaw()
     msg_out_actual.pose.orientation.y = 0.0;
     msg_out_actual.pose.orientation.z = 0.0;
     msg_out_actual.pose.orientation.w = 1.0;
+
+    point_msg.frame_id = msg->header.frame_id;
+
+
+    point_msg.x = 0;
+    point_msg.y = 0;
+    point_msg.z = 0;
+    rclcpp::Time temp = msg_out_actual.header.stamp;
+    point_msg.stamp = RCL_NS_TO_MS((double)temp.nanoseconds());
+	    
+    RCLCPP_INFO(logger,"Timstamp = (%lf)" ,point_msg.stamp);
+
     // Get the yaw value from the imu
     tf2::Quaternion temp_quat;
     tf2::fromMsg(msg_out_actual.pose.orientation, temp_quat);
@@ -143,8 +158,8 @@ yaw()
     	tfBuffer.transform(msg_out_actual,msg_out_actual,target_fr);
       	if (msg_out_actual.pose.position.x < 10000.0){
 
-      		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
-  		    msg_out_actual.header.stamp = clock -> now();
+      	  RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
+	  msg_out_actual.header.stamp = clock -> now();
           msg_out = msg_out_actual;
           //Give target with distance r from actual detection
           msg_out.pose.position.x = msg_out_actual.pose.position.x + r * cos(yaw);
@@ -154,15 +169,11 @@ yaw()
           point_msg.y = msg_out_actual.pose.position.y;
           point_msg.z = msg_out_actual.pose.position.z;
 
-      		pub_real -> publish(msg_out_actual);
+      	  pub_real -> publish(msg_out_actual);
           pub -> publish(msg_out);
           pub_point -> publish(point_msg);
    	    }
         else {
-          RCLCPP_INFO(logger,"No one detected");
-          point_msg.x = 0;
-          point_msg.y = 0;
-          point_msg.z = 0;
           pub_point -> publish(point_msg);
         }
     }
