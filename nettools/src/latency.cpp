@@ -20,6 +20,7 @@
 #include "nettools/latency.hpp"
 #include "nettools_msgs/msg/byte_array.hpp"
 #include "nettools_msgs/msg/roi_with_header.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
 
 template<typename T>
 CalculateStatistics<T>::CalculateStatistics(const std::string topic,rmw_qos_profile_t custom_qos_profile)
@@ -105,6 +106,7 @@ void CalculateStatistics<T>::sample(const rclcpp::Time time_received, const rclc
     msg_out.frequency.avg = msg_out.frequency.val;
     msg_out.frequency.min = msg_out.frequency.val;
     msg_out.frequency.max = msg_out.frequency.val;
+
   }
   else{
     msg_out.frequency.val = (1.0/ RCL_NS_TO_S(double((time_received.nanoseconds() - latest_sample.nanoseconds()))));
@@ -162,6 +164,11 @@ int main(int argc, char * argv[])
   else if (msg_type == "roi")
   {
     typedef nettools_msgs::msg::RoiWithHeader MsgType;
+    rclcpp::spin(std::make_shared<CalculateStatistics<MsgType>>(topic, custom_qos_profile));
+  }
+  else if (msg_type == "pose")
+  {
+    typedef geometry_msgs::msg::PoseStamped MsgType;
     rclcpp::spin(std::make_shared<CalculateStatistics<MsgType>>(topic, custom_qos_profile));
   }
   else{
