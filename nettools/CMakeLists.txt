@@ -71,5 +71,8 @@ install(PROGRAMS
   scripts/variable_length_pub.py
   DESTINATION lib/${PROJECT_NAME})
 
+  install(DIRECTORY
+    launch
+    DESTINATION share/${PROJECT_NAME}/)
 
 ament_package()
