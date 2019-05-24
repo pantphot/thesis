@@ -155,6 +155,7 @@ def main(argv=sys.argv[1:]):
         rclpy.spin(node)
     except KeyboardInterrupt:
         print ("Shutting down")
+        node.fig.savefig(args.stat+'.png' )
         node.destroy_node()
         rclpy.shutdown()
 
