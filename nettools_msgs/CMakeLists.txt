@@ -15,14 +15,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-
+#find_package(firos2 REQUIRED)
 
 rosidl_generate_interfaces(nettools_msgs
   "msg/StatisticsMeasurements.msg"
   "msg/TopicStatistics.msg"
   "msg/ByteArray.msg"
   "msg/RoiWithHeader.msg"
-
+  "msg/PointHeader.msg"
   DEPENDENCIES std_msgs sensor_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)

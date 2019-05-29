@@ -28,7 +28,7 @@ def launch(launch_descriptor, argv):
     package = 'nettools'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='nettools_plotter.py'),
-         '-t', 'image','-s', 'latency'],
+        '-s', 'latency','-t', 'image'],
         name='latency_plotter',
         exit_handler=restart_exit_handler,
     )
@@ -66,4 +66,4 @@ def main(argv=sys.argv[1:]):
 
 
 if __name__ == '__main__':
-sys.exit(main())
+    sys.exit(main())

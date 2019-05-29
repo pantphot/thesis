@@ -87,7 +87,7 @@ void Throughput::callback(const std::shared_ptr<rmw_serialized_message_t> msg)
   subscribed = true;
   // Byte size per message
   buffer = buffer + msg->buffer_length;
-  // std::cout << msg->buffer_length << '\n';
+  //std::cout << msg->buffer_length << '\n';
 }
 
 int main(int argc, char * argv[])
