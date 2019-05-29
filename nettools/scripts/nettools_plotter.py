@@ -36,6 +36,7 @@ class NettoolsPlotter(Node):
         self.fig = plt.figure()
         plt.title(self.stat)
         if self.stat == 'throughput':
+            self.topic = 'topic_throughput_' + topic
             self.sub = self.create_subscription(Float64, self.topic  , self.plot_callback,qos_profile=qos_profile_default)
             plt.xlabel('Time (s)')
             plt.ylabel('Throughput (Mb)')
