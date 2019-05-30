@@ -27,7 +27,7 @@ def launch(launch_descriptor, argv):
     package = 'image_tools'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='cam2image'),
-        '-x', '352', '-y', '288','-r', '0','-f', '5'],
+        '-x', '352', '-y', '288','-r', '0','-f', '2'],
         name='cam2image_node',
         exit_handler=restart_exit_handler,
     )
