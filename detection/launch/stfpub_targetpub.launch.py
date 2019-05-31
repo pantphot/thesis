@@ -1,4 +1,4 @@
-#   detection_localization.launch.py
+#   detection_localization_unified.launch.py
 #   Author: Pantelis Photiou
 #   Created: Mar 2019
 #
@@ -17,12 +17,6 @@ from ros2run.api import get_executable_path
 
 def launch(launch_descriptor, argv):
     ld = launch_descriptor
-    package = 'detection'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-        name='position_estimation_node',
-        exit_handler=restart_exit_handler,
-    )
 
     package = 'tf2_ros'
     ld.add_process(
@@ -33,14 +27,14 @@ def launch(launch_descriptor, argv):
     )
     package = 'detection'
     ld.add_process(
-       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
-       name='target_publisher_node',
-       exit_handler=restart_exit_handler,
-       output_handlers=[ConsoleOutput()],
+        cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher'),
+        '-r', '1'],
+        name='target_publisher',
+        exit_handler=restart_exit_handler,
     )
 
-
     return ld
+
 
 def main(argv=sys.argv[1:]):
     launcher = DefaultLauncher()

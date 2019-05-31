@@ -1,4 +1,4 @@
-#   detection_localization.launch.py
+#   detection_stfpub_targetpub.launch.py
 #   Author: Pantelis Photiou
 #   Created: Mar 2019
 #
@@ -21,16 +21,9 @@ def launch(launch_descriptor, argv):
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='detection'),
         '-r', '0', '-s', '0'],
-        name='detection_node',
+        name='detector',
         exit_handler=restart_exit_handler,
     )
-    package = 'detection'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='position_estimation')],
-        name='position_estimation_node',
-        exit_handler=restart_exit_handler,
-    )
-
     package = 'tf2_ros'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='static_transform_publisher'),
@@ -40,10 +33,10 @@ def launch(launch_descriptor, argv):
     )
     package = 'detection'
     ld.add_process(
-       cmd=[get_executable_path(package_name=package, executable_name='target_publisher')],
-       name='target_publisher_node',
-       exit_handler=restart_exit_handler,
-       output_handlers=[ConsoleOutput()],
+        cmd=[get_executable_path(package_name=package, executable_name='unified_target_publisher'),
+        '-r', '1'],
+        name='target_publisher',
+        exit_handler=restart_exit_handler,
     )
 
     return ld
