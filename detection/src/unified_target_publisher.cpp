@@ -11,6 +11,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+
 #include "rclcpp/rclcpp.hpp"
 #include "unified_target_publisher.hpp"
 #include <cmath>
@@ -19,6 +20,8 @@
 #include <tf2_ros/buffer_interface.h>
 #include <tf2/convert.h>
 #include <geometry_msgs/msg/point_stamped.hpp>
+#include "options.hpp"
+
 
 Unified_Target_Publisher::Unified_Target_Publisher (rmw_qos_profile_t custom_qos_profile)
 : Node ("unified_target_publisher"),
@@ -40,21 +43,27 @@ x(),
 z(),
 y(),
 tfBuffer(),
-tf2_listener(tfBuffer)
+tf2_listener(tfBuffer),
+yaw()
 
 {
-  //   // Initialize publisher that publishes the pose
-  pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
-    "move_base_simple/goal", rmw_qos_profile_default);
+  // Initialize publisher that publishes the pose of the detected face
+ pub_real = this->create_publisher<geometry_msgs::msg::PoseStamped>(
+   "actual_goal", rmw_qos_profile_default);
 
-  // Initialize a subscriber that will receive the Image message.
-  std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
-  sub = this->create_subscription<nettools_msgs::msg::RoiWithHeader>(
-    "region_of_interest", std::bind(&Unified_Target_Publisher::callback, this,  std::placeholders::_1),custom_qos_profile);
+  // Initialize publisher that publishes the point
+ pub_point = this->create_publisher<nettools_msgs::msg::PointHeader>(
+   "detected_point", rmw_qos_profile_default);
+
+ // Initialize publisher that publishes the actual target for the robot
+ pub = this->create_publisher<geometry_msgs::msg::PoseStamped>(
+   "move_base_simple/goal", rmw_qos_profile_default);
 
 
-      // Initialize clock to timestamp the output messages
-  clock = std::make_shared<rclcpp::Clock>(RCL_SYSTEM_TIME);
+ // Initialize a subscriber that will receive the Image message.
+ std::cerr << "Subscribing to topic '/region_of_interest'" << std::endl;
+ sub = this->create_subscription<nettools_msgs::msg::RoiWithHeader>(
+   "region_of_interest", std::bind(&Unified_Target_Publisher::callback, this,  std::placeholders::_1),custom_qos_profile);
 
   }
   //
@@ -105,24 +114,51 @@ tf2_listener(tfBuffer)
 
     RCLCPP_INFO(logger, "distance = %lf ", distance);
 
-    msg_out.header.frame_id = "external_camera";
-    msg_out.header.stamp = clock -> now();
-    msg_out.pose.position.y = -x/100;
-    msg_out.pose.position.z = y/100;
-    msg_out.pose.position.x = z/100;
-    msg_out.pose.orientation.x = 0.0;
-    msg_out.pose.orientation.y = 0.0;
-    msg_out.pose.orientation.z = 0.0;
-    msg_out.pose.orientation.w = 1.0;
+    msg_out_actual.header.frame_id = "external_camera";
+  msg_out_actual.header.stamp = clock -> now();
+  msg_out_actual.pose.position.y = -x/100;
+  msg_out_actual.pose.position.z = y/100;
+  msg_out_actual.pose.position.x = z/100;
+  msg_out_actual.pose.orientation.x = 0.0;
+  msg_out_actual.pose.orientation.y = 0.0;
+  msg_out_actual.pose.orientation.z = 0.0;
+  msg_out_actual.pose.orientation.w = 1.0;
+
+  point_msg.frame_id = msg->header.frame_id;
+
+
+  point_msg.x = 0;
+  point_msg.y = 0;
+  point_msg.z = 0;
+  rclcpp::Time temp = msg_out_actual.header.stamp;
+  point_msg.stamp = RCL_NS_TO_MS((double)temp.nanoseconds());
+  RCLCPP_INFO(logger,"Timstamp = (%lf)" ,point_msg.stamp);
+
+  // Get the yaw value from the imu
+  tf2::Quaternion temp_quat;
+  tf2::fromMsg(msg_out_actual.pose.orientation, temp_quat);
+  yaw = tf2::impl::getYaw(temp_quat);
 
     try{
-    	tfBuffer.transform(msg_out,msg_out,target_fr);
-      	if (msg_out.pose.position.x < 10000.0){
-      		msg_out.pose.position.z=0;
-    		RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out.pose.position.x,msg_out.pose.position.y);
-		    msg_out.header.stamp = clock -> now();
-    		pub -> publish(msg_out);
+      if (msg_out_actual.pose.position.x < 10000.0){
+      RCLCPP_INFO(logger,"Target Coordinates = (%lf , %lf)",msg_out_actual.pose.position.x,msg_out_actual.pose.position.y);
+  msg_out_actual.header.stamp = clock -> now();
+        msg_out = msg_out_actual;
+        //Give target with distance r from actual detection
+        msg_out.pose.position.x = msg_out_actual.pose.position.x + r * cos(yaw);
+        msg_out.pose.position.y = msg_out_actual.pose.position.y + r * cos(yaw);
+        msg_out.pose.position.z=0;
+        point_msg.x = msg_out_actual.pose.position.x;
+        point_msg.y = msg_out_actual.pose.position.y;
+        point_msg.z = msg_out_actual.pose.position.z;
+
+        pub_real -> publish(msg_out_actual);
+        pub -> publish(msg_out);
+        pub_point -> publish(point_msg);
    	 }
+     else {
+        pub_point -> publish(point_msg);
+      }
     }
     catch (tf2::LookupException e)
     {std::cout << e.what() << '\n';}
@@ -133,17 +169,30 @@ tf2_listener(tfBuffer)
   {
     // Pass command line arguments to rclcpp.
     rclcpp::init(argc, argv);
-
+    rclcpp::init(argc, argv);
+    size_t depth = rmw_qos_profile_default.depth;
+    rmw_qos_reliability_policy_t reliability_policy = rmw_qos_profile_default.reliability;
+    rmw_qos_history_policy_t history_policy = rmw_qos_profile_default.history;
+    bool show_camera = false;
+    bool body = false;
+    std::string topic("region_of_interest");
     // Force flush of the stdout buffer.
     // This ensures a correct sync of all prints
     // even when executed simultaneously within a launch file.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
     // Configure parameters with command line options.
+    if (!parse_command_options(
+        argc, argv, &depth, &reliability_policy, &history_policy, &show_camera, &body, &topic))
+    {
+      return 0;
+    }
 
     // Set the parameters of the quality of service profile. Initialize as the default profile.
-
     rmw_qos_profile_t custom_qos_profile = rmw_qos_profile_default;
+    custom_qos_profile.depth = depth;
+    custom_qos_profile.reliability = reliability_policy;
+    custom_qos_profile.history = history_policy;
 
     // Create node and spin
     rclcpp::spin(std::make_shared<Unified_Target_Publisher>(custom_qos_profile));
