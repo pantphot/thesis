@@ -1,4 +1,4 @@
-#   detection_localization_unified.launch.py
+#   stfpub_targetpub.launch.py
 #   Author: Pantelis Photiou
 #   Created: Mar 2019
 #
