@@ -4,7 +4,7 @@
         <participant profile_name="ros2_subscriber">
             <rtps>
                 <builtin>
-                    <domainId>5</domainId>
+                    <domainId>1</domainId>
                 </builtin>
             </rtps>
         </participant>
