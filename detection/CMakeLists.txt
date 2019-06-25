@@ -71,6 +71,7 @@ ament_target_dependencies(target_publisher
 
 add_executable(unified_target_publisher
   src/unified_target_publisher.cpp
+  src/options.cpp
   )
 
 

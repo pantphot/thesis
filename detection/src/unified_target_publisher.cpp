@@ -169,7 +169,6 @@ yaw()
   {
     // Pass command line arguments to rclcpp.
     rclcpp::init(argc, argv);
-    rclcpp::init(argc, argv);
     size_t depth = rmw_qos_profile_default.depth;
     rmw_qos_reliability_policy_t reliability_policy = rmw_qos_profile_default.reliability;
     rmw_qos_history_policy_t history_policy = rmw_qos_profile_default.history;

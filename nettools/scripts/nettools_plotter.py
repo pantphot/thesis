@@ -10,7 +10,7 @@
 import argparse
 import sys
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 import rclpy
@@ -70,7 +70,7 @@ class NettoolsPlotter(Node):
             self.line, = self.ax.plot([],[],color= 'r',label=str(self.stat))
         self.ax.legend(
             loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=True, ncol=2)
-        #plt.show(block=False)
+        plt.show(block=False)
         # Shrink axis' height to make room for legend
         shrink_amnt = 0.2
         box = self.ax.get_position()
