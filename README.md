@@ -9,6 +9,7 @@
     * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
 4. detection:
     * detection.cpp: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the nettools_msgs/RoiWithHeader.msg on topic region_of_interest.
+5. fiware: Contains a docker-compose.yml file for creating a MongoDB instance and a FIWARE Orion Broker.  
 
 # Prerequisites
 1. ROS2 bouncy or crystal
