@@ -24,10 +24,14 @@ The basic function of the implemented application is the collaboration of three 
 * Choosing the most suitable architecture and combination of QoS policies to
 meet the requirements of the system / application.
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/appA.jpeg)
-* Application extension 1: Connect 2 different
+* Application extension 1: Connection of 2 different DDS domains using eProsima Integration Service
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension1.jpeg)
+* Application extension 2: Connection of the system to FIWARE platform for sending alert messages to remote user through Node-RED dashboard  
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension2.jpeg)
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png?raw=true "Node-RED flow")
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png?raw=true "Node-RED Dashboard")
 
-
-*
+?raw=true "Optional Title"
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
 2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
 3. nettools:
