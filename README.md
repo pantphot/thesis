@@ -1,7 +1,7 @@
 # Design and implementation of a hybrid system to satisfy execution time constraints for software built with ROS1, ROS2 and IoT frameworks
 
 This diploma thesis (https://drive.google.com/open?id=1j1NYYV4U7ih4Pj1HSqtCprCo9z_a6Ghv) presents the development of an IoT application, which allows communication between smart devices and robots. For the creation of the system, the use of the ROS2 framework was explored. ROS2 is the latest version of the Robot Operating System (ROS), the most used robotic framework in our day, which implements / uses the DDS (Data Distribution Service) communication protocol. DDS is a real-time, data-centric, publish-subscribe protocol created specifically to meet the needs of a fully distributed IoT system.
-The basic function of the implemented application is the collaboration of three devices for the observation of a space and detecting intruders. The devices used are:
+The basic function of the implemented application is the collaboration of three devices for the observation of a space and the detection of intruders. The devices used are:
 * Raspberry Pi (Raspian Stretch): Detects faces in video stream.
 * Intel NUC7i3BNH (Ubuntu 18.04): Used on the TurtleBot2 for the robot navigation. Orbbec Astra Depth Camera is used for the robot localization.  
 * Computer (Ubuntu 18.04): Used for supporting the application and visualization of various parameters
@@ -15,6 +15,19 @@ The basic function of the implemented application is the collaboration of three 
 * Docker Container
 * FIWARE IoT platform
 * Node-RED
+
+## Methodology
+* Creation of a ROS2 tool (nettools package) for the calculation and visualization of topic statistics (latency, frequency, throughput, message loss, packet delay variation)
+* Configuring the QoS parameters and studying network behavior
+* Creation of a ROS2 tool (detection package) responsible for face detection in image messages and calculation of its location on given map
+* TurtleBot2 navigation system using ROS 1
+* Choosing the most suitable architecture and combination of QoS policies to
+meet the requirements of the system / application.
+![Application](pantphot.github.com/thesis/img/appA.jpg)
+* Application extension 1: Connect 2 different
+
+
+*
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
 2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
 3. nettools:
