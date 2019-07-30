@@ -28,10 +28,12 @@ meet the requirements of the system / application.
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension1.jpeg)
 * Application extension 2: Connection of the system to FIWARE platform for sending alert messages to remote user through Node-RED dashboard  
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension2.jpeg)
+The Node-RED flow created for sending periodic HTTP request to Orion Broker and receiving latest intruder coordinates
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png?raw=true "Node-RED flow")
+The Node-RED dashboard created for delivering alerts to remote user
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png?raw=true "Node-RED Dashboard")
 
-?raw=true "Optional Title"
+
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
 2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
 3. nettools:
