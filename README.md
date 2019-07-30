@@ -23,7 +23,7 @@ The basic function of the implemented application is the collaboration of three 
 * TurtleBot2 navigation system using ROS 1
 * Choosing the most suitable architecture and combination of QoS policies to
 meet the requirements of the system / application.
-![Application](pantphot.github.com/thesis/img/appA.jpeg)
+![Application](https://raw.github.com/pantphot.github.com/thesis/crystal/img/appA.jpeg)
 * Application extension 1: Connect 2 different
 
 
