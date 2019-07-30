@@ -1,15 +1,34 @@
-# Contents
+# Design and implementation of a hybrid system to satisfy execution time constraints for software built with ROS1, ROS2 and IoT frameworks
+
+This diploma thesis (https://drive.google.com/open?id=1j1NYYV4U7ih4Pj1HSqtCprCo9z_a6Ghv) presents the development of an IoT application, which allows communication between smart devices and robots. For the creation of the system, the use of the ROS2 framework was explored. ROS2 is the latest version of the Robot Operating System (ROS), the most used robotic framework in our day, which implements / uses the DDS (Data Distribution Service) communication protocol. DDS is a real-time, data-centric, publish-subscribe protocol created specifically to meet the needs of a fully distributed IoT system.
+The basic function of the implemented application is the collaboration of three devices for the observation of a space and detecting intruders. The devices used are:
+* Raspberry Pi (Raspian Stretch): Detects faces in video stream.
+* Intel NUC7i3BNH (Ubuntu 18.04): Used on the TurtleBot2 for the robot navigation. Orbbec Astra Depth Camera is used for the robot localization.  
+* Computer (Ubuntu 18.04): Used for supporting the application and visualization of various parameters
+
+## Tools and technologies used
+* ROS
+* ROS2
+* eProsima FastRTPS
+* eProsima Integration Service
+* eProsima FIROS2
+* Docker Container
+* FIWARE IoT platform
+* Node-RED
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
-2. nettools_msgs: custom message interface including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
+2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
 3. nettools:
-    * latency.cpp: Subscribes to given TOPIC and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics_TOPIC topic.
-    * throughput.cpp: Subscribes to given TOPIC and calculates network throughput , which then is published on the topic_statistics_TOPIC topic.
-    * variable_length_pub.cpp:  Publishes variable length messages with given increase step and frequency.
+    * latency: Creates a ROS2 subscriber to given TOPIC and calculates network statistics (message loss, latency, frequency,interarrival jitter), which then is published on the topic_statistics_TOPIC topic.
+    * throughput:Creates a ROS2 to given TOPIC and calculates network throughput , which then is published on the topic_statistics_TOPIC topic.
+    * variable_length_pub:  Publishes variable length messages with given increase step and frequency.
     * variable_length_pub.py:  Publishes variable length messages with given increase step and frequency. Only works with ROS2 crystal
-    * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library .   
+    * nettools_plotter.py: A script for plotting the calculated statistics using Python matplotlib library.   
 4. detection:
-    * detection.cpp: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the nettools_msgs/RoiWithHeader.msg on topic region_of_interest.
-5. fiware: Contains a docker-compose.yml file for creating a MongoDB instance and a FIWARE Orion Broker.  
+    * detection: Initializes a ROS 2 node which subscribes to an /image topic and performs face or body detection on received image. The node then publishes the  nettools_msgs/RoiWithHeader.msg on topic region_of_interest.
+    * unified_target_publisher: Initializes a ROS 2 node (target_publisher) which subscribes to a region of interest topic and performs position estimation of detected face using the position of the camera as the reference point. Using the tf2_ros library the estimated position is transformed from the "external_camera" frame to the "map" frame and a PoseStamped message is published on "move_base_simple/goal" topic.  
+5. fiware: Contains a docker-compose.yml file for creating a MongoDB instance and a FIWARE Orion Broker.
+6. domain_change: Contains xml files used by eProsima Integration Service (https://github.com/eProsima/Integration-Service) for connecting DDS participants from different DDS domains.   
+7. maps: Contains the map files which are used by the navigation stack for the Turtlebot navigation in the laboratory.
 
 # Prerequisites
 1. ROS2 bouncy or crystal
@@ -78,6 +97,7 @@ In terminal C run:
 ros2 topic echo /region_of_interest
 ```
 to view if something was detected and the region of interest offsets from the original image.
+
 
 
 * To be able to 'ros2 run' the nettools_plotter.py you have to make it executable before building the package (chmod +x nettools_plotter.py). <br />
