@@ -41,7 +41,7 @@ meet the requirements of the system / application.
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png?raw=true "Node-RED Dashboard")
 
 ## Demo
-![Application](https://github.com/pantphot/thesis/blob/crystal/img/demo.gif?raw=true width="900" height="562.5")
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/demo.gif?raw=true | width=900 | height=562.5)
 
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
 2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
