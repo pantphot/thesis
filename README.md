@@ -1,6 +1,6 @@
 # Design and implementation of a hybrid system to satisfy execution time constraints for software built with ROS1, ROS2 and IoT frameworks
 
-This diploma thesis (https://drive.google.com/open?id=1j1NYYV4U7ih4Pj1HSqtCprCo9z_a6Ghv) presents the development of an IoT application, which allows communication between smart devices and robots. For the creation of the system, the use of the ROS2 framework was explored. ROS2 is the latest version of the Robot Operating System (ROS), the most used robotic framework in our day, which implements / uses the DDS (Data Distribution Service) communication protocol. DDS is a real-time, data-centric, publish-subscribe protocol created specifically to meet the needs of a fully distributed IoT system.
+This diploma thesis (https://drive.google.com/open?id=1j1NYYV4U7ih4Pj1HSqtCprCo9z_a6Ghv) presents the development of an IoT application, which allows communication between smart devices and robots. For the creation of the system, the use of the ROS2 framework was explored. ROS2 is the latest version of the Robot Operating System (ROS), the most used robotic framework in our day, which uses various implementations of the DDS (Data Distribution Service) communication protocol. DDS is a real-time, data-centric, publish-subscribe protocol created specifically to meet the needs of a fully distributed IoT system.
 The basic function of the implemented application is the collaboration of three devices for the observation of a space and the detection of intruders. The devices used are:
 * Raspberry Pi (Raspian Stretch): Detects faces in video stream.
 * Intel NUC7i3BNH (Ubuntu 18.04): Used on the TurtleBot2 for the robot navigation. Orbbec Astra Depth Camera is used for the robot localization.  
@@ -13,6 +13,7 @@ The basic function of the implemented application is the collaboration of three 
 * eProsima Integration Service
 * eProsima FIROS2
 * Docker Container
+* MongoDB
 * FIWARE IoT platform
 * Node-RED
 
@@ -38,7 +39,7 @@ meet the requirements of the system / application.
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png?raw=true "Node-RED Dashboard")
 
 ## Demo
-![Application](https://github.com/pantphot/thesis/blob/crystal/img/demo_with_nettools.mkv?raw=true "Node-RED Dashboard")
+![Application](https://github.com/pantphot/thesis/blob/crystal/img/demo.gif?raw=true "Node-RED Dashboard")
 
 1. image_tools demo: (https://github.com/ros2/demos/tree/master/image_tools/include/image_tools) Modified cam2image.cpp file to include timestamp in published image and calculate average publishing frequency.
 2. nettools_msgs: Contains custom messages including network statistics calculated by the  by the nettools package and ROS2 region of interest message including header.
