@@ -1,0 +1,9 @@
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/install/strip.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/install/local.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/install.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/userlib.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/list_install_components.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/cb_get_point.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/cb_create_point.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/edit_cache.dir
+/home/pantelis/firos2/firos_examples/PointHeader_to_fiware/build/CMakeFiles/rebuild_cache.dir

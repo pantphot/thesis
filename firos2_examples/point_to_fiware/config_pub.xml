@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<is>
+    <profiles>
+        <participant profile_name="point">
+            <rtps>
+                <builtin>
+                    <domainId>5</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="is_subscriber">
+            <topic>
+                <name>rt/detected_point</name>
+                <dataType>geometry_msgs::msg::dds_::Point_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+    </profiles>
+
+    <bridge name="ngsiv2">
+        <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+        <writer name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+        </writer>
+    </bridge>
+
+    <connector name="domain_change">
+        <reader participant_profile="point" subscriber_profile="is_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
+        <transformation file="build/libuserlib.so" function="transform"/> 
+    </connector>
+</is>
