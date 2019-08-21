@@ -32,7 +32,7 @@ meet the requirements of the system / application.
 * Application extension 2: Connection of the system to FIWARE platform, using FIROS2 for sending alert messages to remote user through Node-RED dashboard  
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension2.jpeg)
 
-* The Node-RED flow created for sending periodic HTTP request to Orion Broker and receiving latest intruder coordinates
+* The Node-RED flow created for sending periodic HTTP requests to FIWARE's Orion Broker and receiving latest intruder coordinates.
 
 <p align="center">
     <img src="https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png">
