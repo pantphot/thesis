@@ -33,14 +33,19 @@ meet the requirements of the system / application.
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/extension2.jpeg)
 
 * The Node-RED flow created for sending periodic HTTP request to Orion Broker and receiving latest intruder coordinates
+<p align="center">
+    <img src="https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png">
+</p>
 
-<img align="center" src="https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png">
 
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_flow.png?raw=true "Node-RED flow")
 
 * The Node-RED dashboard created for delivering alerts to remote user
 
-<img align="center" src="https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png">
+<p align="center">
+    <img src="https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png">
+</p>
+
 
 ![Application](https://github.com/pantphot/thesis/blob/crystal/img/Node-RED_dashboard.png?raw=true "Node-RED Dashboard")
 
