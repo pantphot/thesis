@@ -21,7 +21,7 @@ make
 ```
 # Execute Prerequisites
 1. FIWARE image up and running
-2. FIROS2 sourced in environment
+2. eProsima FIROS2 sourced in environment (https://github.com/eProsima/FIROS2)
 
 # Usage
 First a FIWARE image must be up and running.
