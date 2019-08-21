@@ -9,6 +9,7 @@
 1. ROS2 bouncy or crystal
 2. python3
 3. matplotlib
+4. nettools_msgs 
 
 # Build instructions
 Clone in a new workspace e.g ros2_overlay_ws/src.
