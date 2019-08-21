@@ -8,9 +8,6 @@ cd build
 cmake ..
 make
 ```
-# Execute Prerequisites
-1. FIWARE image
-2. FIROS2 sourced in environment
 
 # Build instructions
 For each example create a build directory and use cmake and make to create the necessary binary files e.g.:
@@ -22,6 +19,10 @@ cd build
 cmake ..
 make
 ```
+# Execute Prerequisites
+1. FIWARE image up and running
+2. FIROS2 sourced in environment
+
 # Usage
 First a FIWARE image must be up and running.
 Then a NGSIv2 entity must be created:
